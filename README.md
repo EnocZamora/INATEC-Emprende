@@ -42,6 +42,6 @@
     ```
 
 # Autores
-* **Enoc Zamora**-[![GitHub](https:/shields.io)](https:/github.com/)
-* **José Rostran**-[![GitHub](https:/shields.io)](https:/github.com/)
+* **Enoc Zamora**-[![GitHub](https:/shields.io)](https:/github.com/EnocZamora)
+* **José Rostran**-[![GitHub](https:/shields.io)](https:/github.com/Josesito567)
 * **Gema Rodriguez**

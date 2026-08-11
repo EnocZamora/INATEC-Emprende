@@ -6,17 +6,17 @@
 **INATEC EMPRENDE** es una plataforma web de intermediacion directa que permite a los egresados de INATEC crear perfiles profesionales públicos organizados por especialidad y cursos recibidos. Lo innovador de el proyecto radica en centralizar y estructurar la oferta de servicios técnicos en un solo lugar, resolviendo de forma sencilla la falta de canales de promocion para tecnicos recién graduado y facilitando a la comunidad la búsqueda de mano de obra calificada.
 
 ## Tecnologías Utilizadas
-- **Lenguaje Principal:** PHP
-- **Framework Backend:** Laravel
-- **Framework Frontend:** Tailwind / HTML5 / CSS3
-- **Motor de Base de Datos:** MySQL (Servidor local XAMPP)
-- **Gestor de Dependencias:** Composer
-- **Control de Versiones:** Git & GitHub
+* **Lenguaje Principal:** PHP
+* **Framework Backend:** Laravel
+* **Framework Frontend:** Tailwind / HTML5 / CSS3
+* **Motor de Base de Datos:** MySQL (Servidor local XAMPP)
+* **Gestor de Dependencias:** Composer
+* **Control de Versiones:** Git & GitHub
 
 ## Requisitos Previos Mínimos
-- **Servidor Local:** Laragon
-- **PHP:** >= 8.1
-- **Composer:** Instalado en el sistema
+* **Servidor Local:** XAMPP
+* **PHP:** >= 8.1
+* **Composer:** Instalado en el sistema
 
 ## Instalación de el proyecto
 
@@ -42,6 +42,6 @@
     ```
 
 # Autores
-    * **Enoc Zamora** [My Profile](https:/github.com/EnocZamora)
-    * **José Rostran** [His Profile](https:/github.com/Josesito567)
-    * **Gema Rodriguez**
+* **Enoc Zamora**[My Profile](https:/github.com/EnocZamora)
+* **José Rostran**[His Profile](https:/github.com/Josesito567)
+* **Gema Rodriguez**

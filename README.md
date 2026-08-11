@@ -41,7 +41,7 @@
     php artisan key:generate
     ```
 
-# Autores
-* **Enoc Zamora**-[![GitHub](https:/shields.io)](https:/github.com/EnocZamora)
-* **José Rostran**-[![GitHub](https:/shields.io)](https:/github.com/Josesito567)
+## Autores
+* **Enoc Zamora**
+* **José Rostran**
 * **Gema Rodriguez**

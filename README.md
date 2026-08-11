@@ -1,1 +1,1 @@
-<p align="center"><a href="img/logo_transparente.png" target="_blank"><img width="400" alt="Logo INATEC"></a></p>
+![ texto alertanitvo ] (img/img/logo_transparente.png)

@@ -42,6 +42,6 @@
     ```
 
 # Autores
-* **Enoc Zamora**[My Profile](https:/github.com/EnocZamora)
-* **José Rostran**[His Profile](https:/github.com/Josesito567)
+* **Enoc Zamora**-[![GitHub](https:/shields.io)](https:/github.com/)
+* **José Rostran**-[![GitHub](https:/shields.io)](https:/github.com/)
 * **Gema Rodriguez**

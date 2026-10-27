@@ -2,7 +2,7 @@
 
 **Catálogo institucional de proyectos estudiantiles de los centros tecnológicos de INATEC.**
 
-Plataforma web *paperless* que da visibilidad equitativa a los proyectos técnicos y emprendimientos de las y los estudiantes, y que conecta al visitante directamente con su autor por WhatsApp, sin intermediarios, sin publicidad y sin algoritmos de promoción pagada.
+Plataforma web *paperless* que da visibilidad equitativa a los proyectos técnicos y emprendimientos de las y los estudiantes, y que conecta al visitante directamente con su autor por WhatsApp, sin intermediarios y sin algoritmos de promoción pagada.
 
 <p>
   <img alt="Laravel" src="https://img.shields.io/badge/Laravel-13.x-FF2D20?logo=laravel&logoColor=white">

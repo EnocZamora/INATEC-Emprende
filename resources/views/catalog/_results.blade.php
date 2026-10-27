@@ -60,7 +60,7 @@
 <div class="flex flex-wrap items-end justify-between gap-3">
     <p class="text-[0.8125rem] leading-5 text-slate-500">
         <span class="font-semibold tabular-nums text-slate-900">{{ number_format($total, 0, ',', '.') }}</span>
-        {{ $total === 1 ? 'proyecto' : 'proyectos' }}
+        {{ $total === 1 ? 'emprendimiento' : 'emprendimientos' }}
         {{ $hasFilters ? 'encontrados' : 'publicados' }}
     </p>
 
@@ -129,12 +129,12 @@
     <x-ui.empty-state
         class="mt-6"
         icon="{{ filled($search) ? 'search' : 'grid' }}"
-        :title="filled($search) ? 'Sin resultados para «'.$search.'»' : ($hasFilters ? 'No hay proyectos con estos filtros.' : 'Aún no hay proyectos publicados.')"
+        :title="filled($search) ? 'Sin resultados para «'.$search.'»' : ($hasFilters ? 'No hay emprendimientos con estos filtros.' : 'Aún no hay emprendimientos publicados.')"
         :description="filled($search)
             ? 'Prueba con otra palabra o quita algunos filtros para ampliar la búsqueda.'
             : ($hasFilters
                 ? 'Combinaste varias condiciones. Prueba quitando una o explora todo el catálogo.'
-                : 'Cuando las y los estudiantes publiquen sus proyectos, aparecerán aquí. El catálogo se actualiza en cuanto se publica un proyecto.')"
+                : 'Cuando los egresados publiquen sus emprendimientos, aparecerán aquí. El catálogo se actualiza en cuanto se publica un emprendimiento.')"
     >
         @if ($hasFilters)
             <x-ui.button href="{{ route('catalog.index') }}" variant="secondary" icon="x">
@@ -142,7 +142,7 @@
             </x-ui.button>
         @else
             <x-ui.button :href="auth()->check() ? route('projects.create') : route('register')" icon="plus">
-                Publicar mi proyecto
+                Publicar mi emprendimiento
             </x-ui.button>
         @endif
     </x-ui.empty-state>

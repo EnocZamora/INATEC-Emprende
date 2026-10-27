@@ -65,7 +65,7 @@
                     <ul class="mt-2.5 space-y-2 text-[0.8125rem] leading-5 text-blue-900/90">
                         <li class="flex gap-2">
                             <x-ui.icon name="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700" />
-                            Solo pedimos los datos necesarios para tu ficha y tus proyectos.
+                            Solo pedimos los datos necesarios para tu ficha y tus emprendimientos.
                         </li>
                         <li class="flex gap-2">
                             <x-ui.icon name="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700" />
@@ -89,13 +89,13 @@
                     </x-legal.section>
 
                     <x-legal.section id="datos" number="02" title="Datos que recopilamos">
-                        <p>Para crear una cuenta y publicar proyectos solicitamos:</p>
+                        <p>Para crear una cuenta y publicar emprendimientos solicitamos:</p>
                         <ul>
                             <li>Nombre completo y correo electrónico.</li>
                             <li>Contraseña, almacenada de forma cifrada e irreversible.</li>
                             <li>Centro tecnológico, carrera y número de WhatsApp.</li>
                             <li>Biografía breve, si decides completarla.</li>
-                            <li>Contenido de tus proyectos: título, descripción, categoría, portada y galería.</li>
+                            <li>Contenido de tus emprendimientos: título, descripción, especialidad, portada y galería.</li>
                         </ul>
                         <p>
                             También registramos datos técnicos de sesión necesarios para mantener la seguridad del portal. <strong>No solicitamos documentos de identidad, datos de salud ni datos financieros.</strong>
@@ -105,7 +105,7 @@
                     <x-legal.section id="finalidad" number="03" title="Para qué los usamos">
                         <ul>
                             <li>Crear y administrar tu cuenta institucional.</li>
-                            <li>Mostrar tus proyectos en el catálogo público.</li>
+                            <li>Mostrar tus emprendimientos en el catálogo público.</li>
                             <li>Permitir que las personas interesadas te contacten por WhatsApp.</li>
                             <li>Moderar contenido y atender reclamaciones.</li>
                             <li>Mantener la seguridad del servicio y prevenir abusos.</li>
@@ -117,13 +117,13 @@
 
                     <x-legal.section id="publico" number="04" title="Qué información es pública">
                         <p>
-                            Cuando publicas un proyecto, se muestran públicamente tu nombre, centro, carrera, biografía (si la escribiste), número de WhatsApp y el contenido del proyecto, incluida su portada y galería.
+                            Cuando publicas un emprendimiento, se muestran públicamente tu nombre, centro, carrera, biografía (si la escribiste), número de WhatsApp y el contenido del emprendimiento, incluida su portada y galería.
                         </p>
                         <p>
-                            Tu correo electrónico y tu contraseña nunca se publican. Los borradores y los proyectos suspendidos solo son visibles para ti y para el personal autorizado.
+                            Tu correo electrónico y tu contraseña nunca se publican. Los borradores y los emprendimientos suspendidos solo son visibles para ti y para el personal autorizado.
                         </p>
                         <p>
-                            <strong>Publicar es una decisión.</strong> Si no quieres que tu nombre o tu número sean visibles, puedes mantener el proyecto como borrador o solicitar la revisión de tu ficha a la coordinación de tu centro.
+                            <strong>Publicar es una decisión.</strong> Si no quieres que tu nombre o tu número sean visibles, puedes mantener el emprendimiento como borrador o solicitar la revisión de tu ficha a la coordinación de tu centro.
                         </p>
                     </x-legal.section>
 
@@ -147,10 +147,10 @@
 
                     <x-legal.section id="conservacion" number="07" title="Conservación de los datos">
                         <p>
-                            Conservamos los datos de tu cuenta mientras esté activa y los proyectos mientras no los elimines. Los borradores y proyectos suspendidos permanecen visibles solo para ti y el personal autorizado.
+                            Conservamos los datos de tu cuenta mientras esté activa y los emprendimientos mientras no los elimines. Los borradores y emprendimientos suspendidos permanecen visibles solo para ti y el personal autorizado.
                         </p>
                         <p>
-                            Al eliminar un proyecto, este deja de aparecer en el portal. El registro y las imágenes pueden conservarse internamente para una posible restauración institucional; puedes solicitar su eliminación definitiva a la coordinación de tu centro.
+                            Al eliminar un emprendimiento, este deja de aparecer en el portal. El registro y las imágenes pueden conservarse internamente para una posible restauración institucional; puedes solicitar su eliminación definitiva a la coordinación de tu centro.
                         </p>
                         <p>
                             Los datos de sesión caducan al cerrar sesión o al vencer el plazo configurado. Los respaldos institucionales, si existen, se conservan solo durante el tiempo necesario para operar el servicio.
@@ -159,7 +159,7 @@
 
                     <x-legal.section id="seguridad" number="08" title="Seguridad">
                         <p>
-                            Las contraseñas se almacenan cifradas y el acceso a la edición de proyectos está restringido por políticas: solo el autor y el personal autorizado pueden modificarlos.
+                            Las contraseñas se almacenan cifradas y el acceso a la edición de emprendimientos está restringido por políticas: solo el autor y el personal autorizado pueden modificarlos.
                         </p>
                         <p>
                             Los archivos se guardan en el almacenamiento local del portal. Ningún sistema es completamente infalible; si detectas un acceso indebido o un error de seguridad, comunícalo de inmediato a la coordinación de tu centro.
@@ -167,7 +167,7 @@
                     </x-legal.section>
 
                     <x-legal.section id="derechos" number="09" title="Tus derechos">
-                        <p>Puedes solicitar el acceso, la rectificación, la eliminación o la oposición al tratamiento de tus datos personales. También puedes retirar un proyecto del catálogo en cualquier momento desde tu panel.</p>
+                        <p>Puedes solicitar el acceso, la rectificación, la eliminación o la oposición al tratamiento de tus datos personales. También puedes retirar un emprendimiento del catálogo en cualquier momento desde tu panel.</p>
                         <p>
                             Para corregir tu ficha institucional —centro, carrera o número de WhatsApp— contacta a la coordinación de tu centro tecnológico. La solicitud puede requerir verificación de identidad para proteger tu cuenta.
                         </p>
@@ -189,7 +189,7 @@
                 <div class="mt-10 rounded-xl border border-slate-200/80 bg-white p-5">
                     <p class="text-[0.8125rem] font-semibold text-slate-900">Tus datos, tus decisiones</p>
                     <p class="mt-1.5 text-[0.8125rem] leading-6 text-slate-500">
-                        Publicar un proyecto es opcional y puedes retirarlo cuando quieras. Si tienes dudas sobre qué información aparece en el catálogo, habla con la coordinación de tu centro antes de publicar.
+                        Publicar un emprendimiento es opcional y puedes retirarlo cuando quieras. Si tienes dudas sobre qué información aparece en el catálogo, habla con la coordinación de tu centro antes de publicar.
                     </p>
 
                     <div class="mt-4 flex flex-wrap gap-4 text-[0.75rem] font-medium">

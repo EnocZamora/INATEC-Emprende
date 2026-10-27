@@ -1,14 +1,14 @@
 @extends('layouts.public')
 
 @section('title', 'Términos de uso')
-@section('description', 'Condiciones de uso de INATEC Emprende: cuentas institucionales, publicación de proyectos, escaparate equitativo y contacto directo por WhatsApp.')
+@section('description', 'Condiciones de uso de INATEC Emprende: cuentas institucionales de egresados certificados, publicación de emprendimientos, escaparate equitativo y contacto directo por WhatsApp.')
 
 @section('content')
     @php
         $toc = [
             'objeto' => '01 · Objeto y alcance',
             'cuentas' => '02 · Cuentas institucionales',
-            'publicacion' => '03 · Publicación de proyectos',
+            'publicacion' => '03 · Publicación de emprendimientos',
             'contenido' => '04 · Reglas de contenido',
             'equidad' => '05 · Escaparate equitativo',
             'whatsapp' => '06 · Contacto por WhatsApp',
@@ -36,7 +36,7 @@
                     </h1>
 
                     <p class="mt-3 text-[0.9375rem] leading-6 text-slate-600">
-                        Las reglas básicas para publicar proyectos, usar el catálogo y contactar a sus autores. Están escritas para leerse, no para esconderse.
+                        Las reglas básicas para publicar emprendimientos, usar el catálogo y contactar a sus autores. Están escritas para leerse, no para esconderse.
                     </p>
                 </div>
 
@@ -73,7 +73,7 @@
                         </li>
                         <li class="flex gap-2">
                             <x-ui.icon name="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-700" />
-                            Cada estudiante responde por la información e imágenes que publica.
+                            Cada egresado responde por la información e imágenes que publica.
                         </li>
                     </ul>
                 </div>
@@ -81,28 +81,28 @@
                 <div class="mt-8 space-y-8">
                     <x-legal.section id="objeto" number="01" title="Objeto y alcance">
                         <p>
-                            <strong>INATEC Emprende</strong> es una plataforma digital institucional del Tecnológico Nacional (INATEC) para difundir los proyectos de las y los estudiantes de sus centros tecnológicos.
+                            <strong>INATEC Emprende</strong> es una plataforma digital institucional del Tecnológico Nacional (INATEC) para difundir los emprendimientos técnicos de los egresados certificados de sus centros tecnológicos.
                         </p>
                         <p>
-                            El portal es un escaparate, no un mercado: no procesa pagos, no intermedia contrataciones y no garantiza acuerdos comerciales entre visitantes y estudiantes.
+                            El portal es un escaparate, no un mercado: no procesa pagos, no intermedia contrataciones y no garantiza acuerdos comerciales entre visitantes y emprendedores.
                         </p>
                     </x-legal.section>
 
                     <x-legal.section id="cuentas" number="02" title="Cuentas institucionales">
                         <p>
-                            El acceso está reservado a estudiantes y personal de INATEC. Al crear una cuenta, la persona declara que su vínculo con la institución es real y que los datos de su ficha son correctos.
+                            El acceso está reservado a egresados certificados por INATEC y personal institucional. Al crear una cuenta, la persona declara que su vínculo con la institución es real y que los datos de su ficha son correctos.
                         </p>
                         <p>
                             La cuenta es personal. No compartas tu contraseña ni permitas que otra persona publique desde tu perfil. El centro y la carrera se toman de los registros institucionales y pueden ser corregidos por la coordinación correspondiente.
                         </p>
                     </x-legal.section>
 
-                    <x-legal.section id="publicacion" number="03" title="Publicación de proyectos">
+                    <x-legal.section id="publicacion" number="03" title="Publicación de emprendimientos">
                         <p>
-                            Cada estudiante administra sus propios proyectos. Puede guardarlos como borrador o publicarlos en el catálogo. Solo el autor y el personal autorizado pueden editarlos, suspenderlos o retirarlos.
+                            Cada egresado administra sus propios emprendimientos. Puede guardarlos como borrador o publicarlos en el catálogo. Solo el autor y el personal autorizado pueden editarlos, suspenderlos o retirarlos.
                         </p>
                         <p>
-                            Al publicar, el proyecto puede aparecer en la portada, en el catálogo, en los resultados de búsqueda y en las páginas de especialidad. Publicar no altera el orden cronológico del catálogo.
+                            Al publicar, el emprendimiento puede aparecer en la portada, en el catálogo, en los resultados de búsqueda y en las páginas de especialidad. Publicar no altera el orden cronológico del catálogo.
                         </p>
                     </x-legal.section>
 
@@ -117,7 +117,7 @@
                             <li>Incluya enlaces maliciosos, spam o software no solicitado.</li>
                         </ul>
                         <p>
-                            La descripción debe corresponder a un proyecto técnico real y reflejar su estado actual. Las imágenes deben ser del proyecto o contar con permiso para usarlas.
+                            La descripción debe corresponder a un emprendimiento técnico real y reflejar su estado actual. Las imágenes deben ser del emprendimiento o contar con permiso para usarlas.
                         </p>
                     </x-legal.section>
 
@@ -126,13 +126,13 @@
                             El catálogo se ordena por fecha de publicación y por los filtros que elige cada visitante: especialidad, departamento, centro o carrera. No existen anuncios, posiciones pagadas ni algoritmos de promoción.
                         </p>
                         <p>
-                            <strong>Ningún pago, favor o convenio altera la visibilidad de un proyecto.</strong> Esa regla es parte de la identidad del portal y no está sujeta a excepciones comerciales.
+                            <strong>Ningún pago, favor o convenio altera la visibilidad de un emprendimiento.</strong> Esa regla es parte de la identidad del portal y no está sujeta a excepciones comerciales.
                         </p>
                     </x-legal.section>
 
                     <x-legal.section id="whatsapp" number="06" title="Contacto por WhatsApp">
                         <p>
-                            El botón de contacto abre WhatsApp —un servicio de Meta— con un mensaje prellenado que incluye el nombre del proyecto. El número lo proporciona el estudiante en su ficha institucional y se muestra públicamente en los proyectos que decide publicar.
+                            El botón de contacto abre WhatsApp —un servicio de Meta— con un mensaje prellenado que incluye el nombre del emprendimiento. El número lo proporciona el egresado en su ficha institucional y se muestra públicamente en los emprendimientos que decide publicar.
                         </p>
                         <p>
                             La conversación ocurre fuera de la plataforma y bajo la responsabilidad de quienes participan. INATEC no recibe copia de los mensajes ni participa en los acuerdos que puedan surgir.
@@ -141,7 +141,7 @@
 
                     <x-legal.section id="propiedad" number="07" title="Propiedad intelectual">
                         <p>
-                            El estudiante conserva la autoría y los derechos sobre su proyecto. Al publicarlo, autoriza a INATEC a mostrarlo en esta plataforma con fines institucionales y educativos, sin uso comercial.
+                            El egresado conserva la autoría y los derechos sobre su emprendimiento. Al publicarlo, autoriza a INATEC a mostrarlo en esta plataforma con fines institucionales y de difusión del talento técnico, sin uso comercial.
                         </p>
                         <p>
                             Las marcas, logotipos y materiales de INATEC no pueden utilizarse para fines ajenos a la institución ni sugerir un respaldo que no existe.
@@ -150,10 +150,10 @@
 
                     <x-legal.section id="moderacion" number="08" title="Moderación y suspensión">
                         <p>
-                            La coordinación del centro o el equipo administrador puede suspender un proyecto si incumple estas reglas, si existe una reclamación o si la información es inconsistente. Un proyecto suspendido deja de aparecer en el catálogo, pero su autor conserva acceso para corregirlo.
+                            La coordinación del centro o el equipo administrador puede suspender un emprendimiento si incumple estas reglas, si existe una reclamación o si la información es inconsistente. Un emprendimiento suspendido deja de aparecer en el catálogo, pero su autor conserva acceso para corregirlo.
                         </p>
                         <p>
-                            Los casos graves pueden derivarse a las instancias institucionales correspondientes. La suspensión no elimina automáticamente el proyecto ni sus archivos.
+                            Los casos graves pueden derivarse a las instancias institucionales correspondientes. La suspensión no elimina automáticamente el emprendimiento ni sus archivos.
                         </p>
                     </x-legal.section>
 

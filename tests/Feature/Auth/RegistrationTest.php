@@ -149,6 +149,49 @@ class RegistrationTest extends TestCase
         ]))->assertSessionHasErrors('phone_whatsapp');
     }
 
+    public function test_whatsapp_accepts_eight_national_digits_and_stores_the_country_code(): void
+    {
+        $this->post(route('register'), $this->payload([
+            'phone_whatsapp' => '+505 7777-7777',
+        ]))->assertRedirect(route('login'));
+
+        $this->assertSame(
+            '50577777777',
+            User::query()->where('email', 'maria.lopez@correo.com')->firstOrFail()->profile->phone_whatsapp,
+        );
+    }
+
+    public function test_whatsapp_rejects_more_than_eight_national_digits(): void
+    {
+        $this->post(route('register'), $this->payload([
+            'phone_whatsapp' => '8888 8888 8',
+        ]))->assertSessionHasErrors('phone_whatsapp');
+    }
+
+    public function test_whatsapp_rejects_text_input(): void
+    {
+        $this->post(route('register'), $this->payload([
+            'phone_whatsapp' => 'llámame',
+        ]))->assertSessionHasErrors('phone_whatsapp');
+    }
+
+    public function test_whatsapp_rejects_numbers_that_are_not_mobile_lines(): void
+    {
+        $this->post(route('register'), $this->payload([
+            'phone_whatsapp' => '2222 2222',
+        ]))->assertSessionHasErrors('phone_whatsapp');
+    }
+
+    public function test_the_whatsapp_field_accepts_eight_numeric_digits_only(): void
+    {
+        $this->get(route('register'))
+            ->assertOk()
+            ->assertSee('inputmode="numeric"', false)
+            ->assertSee('maxlength="8"', false)
+            ->assertSee('pattern="[0-9]{8}"', false)
+            ->assertSee('autocomplete="tel-national"', false);
+    }
+
     public function test_terms_must_be_accepted(): void
     {
         $this->post(route('register'), $this->payload(['terms' => '0']))

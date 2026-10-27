@@ -21,7 +21,7 @@
         @if ($cover)
             <img
                 src="{{ $cover }}"
-                alt="Portada del proyecto {{ $project->title }}"
+                alt="Portada del emprendimiento {{ $project->title }}"
                 loading="lazy"
                 decoding="async"
                 class="absolute inset-0 h-full w-full object-cover text-transparent transition-transform duration-500 ease-out motion-reduce:transition-none motion-safe:group-hover/card:scale-[1.02]"
@@ -53,7 +53,7 @@
 
             <div class="min-w-0">
                 <p class="truncate text-[0.75rem] leading-4 font-medium text-slate-700">
-                    {{ $owner?->name ?? 'Estudiante INATEC' }}
+                    {{ $owner?->name ?? 'Egresado INATEC' }}
                 </p>
                 <p class="truncate text-[0.6875rem] leading-4 text-slate-500">
                     {{ $context !== '' ? $context : 'Tecnológico Nacional' }}

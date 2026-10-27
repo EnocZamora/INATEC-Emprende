@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#ffffff">
-    <meta name="description" content="@yield('description', 'Catálogo institucional de proyectos estudiantiles de los centros tecnológicos de INATEC. Contacto directo, sin promoción pagada.')">
+    <meta name="description" content="@yield('description', 'Catálogo institucional de emprendimientos técnicos de egresados certificados por INATEC. Contacto directo, sin promoción pagada.')">
 
-    <title>@yield('title', 'Proyectos estudiantiles') · INATEC Emprende</title>
+    <title>@yield('title', 'Emprendimientos técnicos') · INATEC Emprende</title>
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="INATEC Emprende">
-    <meta property="og:title" content="@yield('title', 'Proyectos estudiantiles') · INATEC Emprende">
-    <meta property="og:description" content="@yield('description', 'Catálogo institucional de proyectos estudiantiles de los centros tecnológicos de INATEC.')">
+    <meta property="og:title" content="@yield('title', 'Emprendimientos técnicos') · INATEC Emprende">
+    <meta property="og:description" content="@yield('description', 'Catálogo institucional de emprendimientos técnicos de egresados certificados por INATEC.')">
     <meta property="og:url" content="{{ url()->current() }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -63,7 +63,7 @@
                 <a
                     href="{{ route('catalog.search') }}"
                     class="hidden h-9 w-9 items-center justify-center rounded-lg text-slate-500 outline-none transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-blue-600/40 focus-visible:ring-offset-2 sm:inline-flex"
-                    aria-label="Buscar proyectos"
+                    aria-label="Buscar emprendimientos"
                 >
                     <x-ui.icon name="search" class="h-[1.125rem] w-[1.125rem]" />
                 </a>
@@ -79,13 +79,13 @@
                     {{-- Wrapper: the button component's own `inline-flex` would beat a `hidden` utility. --}}
                     <span class="hidden sm:block">
                         <x-ui.button href="{{ route('register') }}" size="sm" icon="plus">
-                            Publicar proyecto
+                            Publicar emprendimiento
                         </x-ui.button>
                     </span>
                 @else
                     <span class="hidden sm:block">
                         <x-ui.button href="{{ route('projects.create') }}" size="sm" icon="plus">
-                            Nuevo proyecto
+                            Nuevo emprendimiento
                         </x-ui.button>
                     </span>
 
@@ -134,9 +134,14 @@
                                 Mi panel
                             </a>
 
+                            <a href="{{ route('profile.show') }}" role="menuitem" class="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[0.8125rem] font-medium text-slate-700 outline-none transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900 focus-visible:bg-slate-50">
+                                <x-ui.icon name="user" class="h-4 w-4 text-slate-400" />
+                                Mi perfil
+                            </a>
+
                             <a href="{{ route('projects.create') }}" role="menuitem" class="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[0.8125rem] font-medium text-slate-700 outline-none transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900 focus-visible:bg-slate-50">
                                 <x-ui.icon name="plus" class="h-4 w-4 text-slate-400" />
-                                Nuevo proyecto
+                                Nuevo emprendimiento
                             </a>
 
                             <a href="{{ route('catalog.index') }}" role="menuitem" class="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[0.8125rem] font-medium text-slate-700 outline-none transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900 focus-visible:bg-slate-50">
@@ -186,7 +191,7 @@
                     </a>
 
                     <a href="{{ route('catalog.search') }}" @click="close()" class="flex items-center justify-between rounded-lg px-3 py-2.5 text-[0.875rem] font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50 hover:text-slate-900">
-                        Buscar proyectos
+                        Buscar emprendimientos
                         <x-ui.icon name="chevron-right" class="h-4 w-4 text-slate-300" />
                     </a>
 
@@ -201,7 +206,7 @@
                 @guest
                     <div class="space-y-2">
                         <x-ui.button href="{{ route('register') }}" icon="plus" class="w-full">
-                            Publicar mi proyecto
+                            Publicar mi emprendimiento
                         </x-ui.button>
 
                         <x-ui.button href="{{ route('login') }}" variant="secondary" class="w-full">
@@ -214,8 +219,12 @@
                             Mi panel
                         </x-ui.button>
 
+                        <x-ui.button href="{{ route('profile.show') }}" variant="secondary" icon="user" class="w-full">
+                            Mi perfil
+                        </x-ui.button>
+
                         <x-ui.button href="{{ route('projects.create') }}" variant="secondary" icon="plus" class="w-full">
-                            Nuevo proyecto
+                            Nuevo emprendimiento
                         </x-ui.button>
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -244,12 +253,12 @@
                     <x-brand.wordmark />
 
                     <p class="mt-4 text-[0.8125rem] leading-6 text-slate-500">
-                        El escaparate de los proyectos técnicos de los centros de INATEC. Sin promoción pagada, con contacto directo entre estudiantes y comunidad.
+                        El escaparate de los emprendimientos técnicos de los egresados certificados por INATEC. Sin promoción pagada, con contacto directo entre emprendedores y comunidad.
                     </p>
 
                     <p class="mt-4 inline-flex items-center gap-1.5 text-[0.6875rem] font-medium text-slate-500">
                         <x-ui.icon name="shield-check" class="h-3.5 w-3.5 text-blue-700" />
-                        Plataforma institucional
+                        Egresados certificados por INATEC
                     </p>
                 </div>
 
@@ -258,7 +267,7 @@
 
                     <ul class="mt-3 space-y-2 text-[0.8125rem]">
                         <li><a href="{{ route('catalog.index') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Catálogo completo</a></li>
-                        <li><a href="{{ route('catalog.search') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Buscar proyectos</a></li>
+                        <li><a href="{{ route('catalog.search') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Buscar emprendimientos</a></li>
                         <li><a href="{{ route('home') }}#como-funciona" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Cómo funciona</a></li>
                     </ul>
                 </div>
@@ -283,7 +292,8 @@
                     <ul class="mt-3 space-y-2 text-[0.8125rem]">
                         @auth
                             <li><a href="{{ route('dashboard') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Mi panel</a></li>
-                            <li><a href="{{ route('projects.create') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Nuevo proyecto</a></li>
+                            <li><a href="{{ route('profile.show') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Mi perfil</a></li>
+                            <li><a href="{{ route('projects.create') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Nuevo emprendimiento</a></li>
                         @else
                             <li><a href="{{ route('login') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Iniciar sesión</a></li>
                             <li><a href="{{ route('register') }}" class="rounded-sm text-slate-600 underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Crear cuenta</a></li>

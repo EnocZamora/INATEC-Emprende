@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\WhatsAppNumber;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -51,17 +52,17 @@ class UserProfile extends Model
     protected function whatsappDisplay(): Attribute
     {
         return Attribute::get(function (): ?string {
-            $digits = preg_replace('/\D+/', '', (string) $this->phone_whatsapp);
+            $national = WhatsAppNumber::national($this->phone_whatsapp);
 
-            if ($digits === null || $digits === '') {
+            if ($national === '') {
                 return null;
             }
 
-            if (strlen($digits) === 11 && str_starts_with($digits, '505')) {
-                return sprintf('+505 %s %s', substr($digits, 3, 4), substr($digits, 7, 4));
+            if (preg_match(WhatsAppNumber::NATIONAL_PATTERN, $national) === 1) {
+                return sprintf('+505 %s %s', substr($national, 0, 4), substr($national, 4, 4));
             }
 
-            return '+'.$digits;
+            return '+'.$national;
         });
     }
 

@@ -73,6 +73,46 @@ Alpine.data('passwordField', ({ strength = false, matchField = null } = {}) => (
 }));
 
 /**
+ * Numeric-only phone field.
+ *
+ * Students type the 8-digit national number; letters, spaces and symbols are
+ * dropped on input and on paste instead of being rejected after a round trip.
+ * `touched` keeps the amber warning from flashing while the first digits are
+ * still being typed, and the counter in the label row makes the limit visible
+ * before the field is full.
+ */
+Alpine.data('phoneField', ({ max = 8, initial = '' } = {}) => ({
+    value: String(initial ?? '').replace(/\D+/g, '').slice(0, max),
+    touched: false,
+    max,
+
+    get incomplete() {
+        return this.touched && this.value.length > 0 && this.value.length < this.max;
+    },
+
+    onInput(event) {
+        const clean = String(event.target.value ?? '').replace(/\D+/g, '').slice(0, this.max);
+
+        if (event.target.value !== clean) {
+            const atEnd = event.target.selectionStart === event.target.value.length;
+
+            event.target.value = clean;
+
+            if (atEnd) {
+                event.target.setSelectionRange(clean.length, clean.length);
+            }
+        }
+
+        this.value = clean;
+        this.touched = false;
+    },
+
+    onBlur() {
+        this.touched = true;
+    },
+}));
+
+/**
  * Header navigation on small screens.
  *
  * The panel is absolutely positioned under the sticky header, so the page

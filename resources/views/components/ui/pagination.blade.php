@@ -16,13 +16,13 @@
         $link = 'inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-transparent px-2 text-[0.8125rem] font-medium tabular-nums text-slate-600 outline-none transition-[background-color,border-color,color] duration-150 ease-out hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-blue-600/40 focus-visible:ring-offset-2';
     @endphp
 
-    <nav class="flex flex-col items-center justify-between gap-4 border-t border-slate-200/80 pt-5 sm:flex-row" role="navigation" aria-label="Paginación de proyectos">
+    <nav class="flex flex-col items-center justify-between gap-4 border-t border-slate-200/80 pt-5 sm:flex-row" role="navigation" aria-label="Paginación de emprendimientos">
         <p class="text-[0.75rem] leading-5 text-slate-500">
             Mostrando
             <span class="font-medium tabular-nums text-slate-700">{{ $paginator->firstItem() }}–{{ $paginator->lastItem() }}</span>
             de
             <span class="font-medium tabular-nums text-slate-700">{{ $paginator->total() }}</span>
-            {{ $paginator->total() === 1 ? 'proyecto' : 'proyectos' }}
+            {{ $paginator->total() === 1 ? 'emprendimiento' : 'emprendimientos' }}
         </p>
 
         <div class="flex items-center gap-0.5">

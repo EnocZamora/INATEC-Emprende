@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Mi panel')
-@section('description', 'Administra tus proyectos estudiantiles: revisa su estado, edita la información y publícalos en el catálogo de INATEC Emprende.')
+@section('description', 'Administra tus emprendimientos: revisa su estado, edita la información y publícalos en el catálogo de INATEC Emprende.')
 
 @section('content')
     @php
@@ -10,7 +10,7 @@
         $profileComplete = filled($profile?->center_id) && filled($profile?->career_id) && filled($profile?->phone_whatsapp);
 
         $statCards = [
-            ['label' => 'Proyectos', 'value' => $stats['total'], 'hint' => 'en total', 'tone' => 'text-slate-900'],
+            ['label' => 'Emprendimientos', 'value' => $stats['total'], 'hint' => 'en total', 'tone' => 'text-slate-900'],
             ['label' => 'Publicados', 'value' => $stats['published'], 'hint' => 'visibles en el catálogo', 'tone' => 'text-blue-700'],
             ['label' => 'Borradores', 'value' => $stats['draft'], 'hint' => 'solo los ves tú', 'tone' => 'text-slate-900'],
             ['label' => 'Suspendidos', 'value' => $stats['suspended'], 'hint' => 'fuera del catálogo', 'tone' => $stats['suspended'] > 0 ? 'text-red-700' : 'text-slate-900'],
@@ -27,14 +27,14 @@
 
             <div class="mt-4 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-700 uppercase">Panel del estudiante</p>
+                    <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-700 uppercase">Panel del emprendedor</p>
 
                     <h1 class="mt-2 text-[1.875rem] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-slate-900 sm:text-[2.25rem]">
                         Hola, {{ $firstName }}.
                     </h1>
 
                     <p class="mt-2.5 max-w-xl text-[0.9375rem] leading-6 text-slate-600">
-                        Desde aquí administras tus proyectos. Publica cuando estén listos y mantén la información al día.
+                        Desde aquí administras tus emprendimientos. Publica cuando estén listos y mantén la información al día.
                     </p>
                 </div>
 
@@ -44,7 +44,7 @@
                     </x-ui.button>
 
                     <x-ui.button href="{{ route('projects.create') }}" size="sm" icon="plus">
-                        Nuevo proyecto
+                        Nuevo emprendimiento
                     </x-ui.button>
                 </div>
             </div>
@@ -65,8 +65,8 @@
 
     <div class="mx-auto max-w-6xl px-5 py-9 sm:px-8 sm:py-10">
         @if ($stats['suspended'] > 0)
-            <x-ui.alert variant="warning" title="Tienes {{ $stats['suspended'] }} {{ $stats['suspended'] === 1 ? 'proyecto suspendido' : 'proyectos suspendidos' }}" class="mb-6">
-                Un proyecto suspendido no aparece en el catálogo. Revisa su información o consulta con la coordinación de tu centro tecnológico antes de volver a publicarlo.
+            <x-ui.alert variant="warning" title="Tienes {{ $stats['suspended'] }} {{ $stats['suspended'] === 1 ? 'emprendimiento suspendido' : 'emprendimientos suspendidos' }}" class="mb-6">
+                Un emprendimiento suspendido no aparece en el catálogo. Revisa su información o consulta con la coordinación de tu centro tecnológico antes de volver a publicarlo.
             </x-ui.alert>
         @endif
 
@@ -74,9 +74,9 @@
             <section class="min-w-0">
                 <div class="flex items-end justify-between gap-4">
                     <div>
-                        <h2 class="text-[1.125rem] font-semibold tracking-[-0.015em] text-slate-900">Tus proyectos</h2>
+                        <h2 class="text-[1.125rem] font-semibold tracking-[-0.015em] text-slate-900">Tus emprendimientos</h2>
                         <p class="mt-1 text-[0.75rem] text-slate-500">
-                            {{ $projects->total() }} {{ $projects->total() === 1 ? 'proyecto registrado' : 'proyectos registrados' }}
+                            {{ $projects->total() }} {{ $projects->total() === 1 ? 'emprendimiento registrado' : 'emprendimientos registrados' }}
                         </p>
                     </div>
 
@@ -91,13 +91,13 @@
                 @if ($projects->isEmpty())
                     <x-ui.empty-state
                         icon="plus"
-                        title="Todavía no tienes proyectos."
-                        description="Publica tu primer proyecto técnico. Puedes guardarlo como borrador y publicarlo cuando la información y la portada estén listas."
+                        title="Todavía no tienes emprendimientos."
+                        description="Publica tu primer emprendimiento técnico. Puedes guardarlo como borrador y publicarlo cuando la información y la portada estén listas."
                         class="mt-4"
                     >
                         <div class="flex flex-col items-center justify-center gap-2 sm:flex-row">
                             <x-ui.button href="{{ route('projects.create') }}" icon="plus">
-                                Crear mi primer proyecto
+                                Crear mi primer emprendimiento
                             </x-ui.button>
 
                             <x-ui.button href="{{ route('catalog.index') }}" variant="secondary">
@@ -175,7 +175,7 @@
                                         x-show="! confirming"
                                         @click="ask()"
                                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 outline-none transition-colors duration-150 hover:bg-red-50 hover:text-red-700 focus-visible:ring-2 focus-visible:ring-red-500/40 focus-visible:ring-offset-2 motion-safe:active:scale-[0.98]"
-                                        aria-label="Eliminar el proyecto {{ $project->title }}"
+                                        aria-label="Eliminar el emprendimiento {{ $project->title }}"
                                     >
                                         <x-ui.icon name="trash" class="h-4 w-4" />
                                     </button>
@@ -212,7 +212,7 @@
                     </div>
 
                     <p class="mt-4 text-[0.6875rem] leading-5 text-slate-400">
-                        Al eliminar un proyecto deja de aparecer en el catálogo y en tu panel. Las imágenes se conservan en el almacenamiento local por si la coordinación necesita restaurarlo.
+                        Al eliminar un emprendimiento deja de aparecer en el catálogo y en tu panel. Las imágenes se conservan en el almacenamiento local por si la coordinación necesita restaurarlo.
                     </p>
                 @endif
             </section>
@@ -244,11 +244,17 @@
                         </div>
                     </dl>
 
-                    @unless ($profileComplete)
-                        <p class="mt-4 border-t border-slate-100 pt-3 text-[0.6875rem] leading-5 text-slate-500">
-                            Tu ficha está incompleta. La coordinación de tu centro tecnológico puede actualizar estos datos para que los visitantes puedan contactarte.
-                        </p>
-                    @endunless
+                    <div class="mt-4 border-t border-slate-100 pt-3">
+                        <x-ui.button href="{{ route('profile.edit') }}" variant="secondary" size="sm" icon="pencil-square" class="w-full">
+                            Editar perfil
+                        </x-ui.button>
+
+                        @unless ($profileComplete)
+                            <p class="mt-2.5 text-[0.6875rem] leading-5 text-slate-500">
+                                Tu ficha está incompleta: agrega tu WhatsApp para que los visitantes puedan contactarte.
+                            </p>
+                        @endunless
+                    </div>
                 </div>
 
                 <div class="rounded-xl border border-slate-200/80 bg-slate-50/60 p-5">

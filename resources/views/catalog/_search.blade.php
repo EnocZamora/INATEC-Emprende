@@ -4,7 +4,7 @@
 @endphp
 
 <div>
-    <label for="search" class="sr-only">Buscar proyectos por título o descripción</label>
+    <label for="search" class="sr-only">Buscar emprendimientos por título o descripción</label>
 
     <div class="relative">
         <span class="pointer-events-none absolute inset-y-0 start-0 flex w-11 items-center justify-center text-slate-400">
@@ -19,6 +19,8 @@
             placeholder="Busca por título o descripción…"
             autocomplete="off"
             spellcheck="false"
+            enterkeyhint="search"
+            maxlength="150"
             class="block h-12 w-full appearance-none rounded-xl border border-slate-300/90 bg-white ps-11 pe-32 text-base text-slate-900 shadow-[0_1px_1px_rgb(15_23_42/0.03)] outline-none transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-slate-400 hover:border-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 sm:text-[0.9375rem] [&::-webkit-search-cancel-button]:appearance-none"
         >
 

@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', 'Catálogo de proyectos')
-@section('description', 'Catálogo institucional de proyectos de los centros tecnológicos de INATEC. Filtra por especialidad, departamento, centro o carrera y contacta directamente a sus autores.')
+@section('title', 'Catálogo de emprendimientos')
+@section('description', 'Catálogo institucional de emprendimientos técnicos de egresados certificados por INATEC. Filtra por especialidad, departamento, centro o carrera y contacta directamente a sus autores.')
 
 @section('content')
     <section class="border-b border-slate-200/80 bg-slate-50/60">
@@ -17,11 +17,11 @@
                     <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-700 uppercase">Talento técnico · Nicaragua</p>
 
                     <h1 class="mt-2.5 text-[2rem] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-slate-900 sm:text-[2.5rem]">
-                        Catálogo de proyectos
+                        Catálogo de emprendimientos
                     </h1>
 
                     <p class="mt-3 max-w-2xl text-[0.9375rem] leading-6 text-slate-600">
-                        Proyectos reales de estudiantes de los centros tecnológicos de INATEC. Combina especialidad, departamento, centro y carrera para encontrar lo que buscas.
+                        Emprendimientos reales de egresados certificados por INATEC. Combina especialidad, departamento, centro y carrera para encontrar lo que buscas.
                     </p>
                 </div>
 
@@ -29,7 +29,7 @@
                     <span class="flex items-center gap-1.5">
                         <span class="h-1.5 w-1.5 rounded-full bg-blue-700" aria-hidden="true"></span>
                         <span class="font-semibold tabular-nums text-slate-900">{{ number_format($projects->total(), 0, ',', '.') }}</span>
-                        {{ $projects->total() === 1 ? 'proyecto' : 'proyectos' }}
+                        {{ $projects->total() === 1 ? 'emprendimiento' : 'emprendimientos' }}
                     </span>
 
                     <span class="hidden h-4 w-px bg-slate-200 sm:block" aria-hidden="true"></span>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Auth;
 
+use App\Support\WhatsAppNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -33,7 +34,7 @@ class RegisterRequest extends FormRequest
         $this->merge([
             'name' => is_string($name) ? Str::squish($name) : '',
             'email' => is_string($email) ? Str::lower(trim($email)) : '',
-            'phone_whatsapp' => $this->normalizePhone($this->input('phone_whatsapp')),
+            'phone_whatsapp' => WhatsAppNumber::normalize($this->input('phone_whatsapp')),
         ]);
     }
 
@@ -62,7 +63,8 @@ class RegisterRequest extends FormRequest
             'phone_whatsapp' => [
                 'required',
                 'string',
-                'regex:/^505[578]\d{7}$/',
+                'max:20',
+                'regex:'.WhatsAppNumber::STORED_PATTERN,
             ],
             'career_id' => [
                 'required',
@@ -129,23 +131,5 @@ class RegisterRequest extends FormRequest
             'career_id' => 'carrera',
             'password' => 'contraseña',
         ];
-    }
-
-    /**
-     * Strip every non-digit character and prepend the country code when omitted.
-     */
-    private function normalizePhone(mixed $value): string
-    {
-        if (! is_string($value)) {
-            return '';
-        }
-
-        $digits = preg_replace('/\D+/', '', $value) ?? '';
-
-        if (strlen($digits) === 8) {
-            return '505'.$digits;
-        }
-
-        return $digits;
     }
 }

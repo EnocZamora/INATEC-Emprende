@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Http\Policies\ProjectPolicy;
 use App\Observers\ProjectObserver;
+use App\Support\WhatsAppNumber;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -66,9 +67,9 @@ class Project extends Model
                 return null;
             }
 
-            $number = preg_replace('/\D+/', '', (string) $phone);
+            $number = WhatsAppNumber::normalize($phone);
 
-            if ($number === null || $number === '') {
+            if (! WhatsAppNumber::isValid($number)) {
                 return null;
             }
 

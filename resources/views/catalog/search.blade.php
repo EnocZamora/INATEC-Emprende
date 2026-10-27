@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', filled($filters['search']) ? 'Búsqueda: '.$filters['search'] : 'Buscar proyectos')
-@section('description', 'Busca proyectos estudiantiles de INATEC por título o descripción y combina la búsqueda con filtros de especialidad, centro y departamento.')
+@section('title', filled($filters['search']) ? 'Búsqueda: '.$filters['search'] : 'Buscar emprendimientos')
+@section('description', 'Busca emprendimientos técnicos de egresados certificados por INATEC por título o descripción y combina la búsqueda con filtros de especialidad, centro y departamento.')
 
 @section('content')
     @php $term = $filters['search'] ?? ''; @endphp
@@ -23,15 +23,15 @@
                     @if (filled($term))
                         Resultados para «{{ $term }}»
                     @else
-                        Encuentra un proyecto
+                        Encuentra un emprendimiento
                     @endif
                 </h1>
 
                 <p class="mt-3 text-[0.9375rem] leading-6 text-slate-600">
                     @if (filled($term))
-                        Buscamos coincidencias en el título y la descripción de todos los proyectos publicados. Puedes afinar el resultado con los filtros.
+                        Buscamos coincidencias en el título y la descripción de todos los emprendimientos publicados. Puedes afinar el resultado con los filtros.
                     @else
-                        Escribe una palabra clave, el nombre de una carrera o parte de un título. La búsqueda recorre todos los proyectos publicados.
+                        Escribe una palabra clave, el nombre de una carrera o parte de un título. La búsqueda recorre todos los emprendimientos publicados.
                     @endif
                 </p>
             </div>

@@ -6,12 +6,19 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Support\WhatsAppNumber;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * The route carries no target: the profile being edited is always the
+     * authenticated account. The `profile`/`user` lookup is kept for a future
+     * administrative editor so ownership keeps being enforced server-side.
      */
     public function authorize(): bool
     {
@@ -42,12 +49,17 @@ class ProfileUpdateRequest extends FormRequest
     }
 
     /**
-     * Normalize the WhatsApp number to the canonical 505XXXXXXXX format.
+     * Normalize the identity fields and the WhatsApp number before validation.
      */
     protected function prepareForValidation(): void
     {
+        $name = $this->input('name');
+        $email = $this->input('email');
+
         $this->merge([
-            'phone_whatsapp' => $this->normalizePhone($this->input('phone_whatsapp')),
+            'name' => is_string($name) ? Str::squish($name) : '',
+            'email' => is_string($email) ? Str::lower(trim($email)) : '',
+            'phone_whatsapp' => WhatsAppNumber::normalize($this->input('phone_whatsapp')),
             'bio' => $this->sanitizeBio($this->input('bio')),
         ]);
     }
@@ -60,8 +72,27 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:120',
+                "regex:/^[\p{L}\p{M}\s.'\-]+$/u",
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user()?->id),
+            ],
             'bio' => ['nullable', 'string', 'max:1000'],
-            'phone_whatsapp' => ['required', 'string', 'regex:/^505\d{8}$/'],
+            'phone_whatsapp' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:'.WhatsAppNumber::STORED_PATTERN,
+            ],
         ];
     }
 
@@ -73,26 +104,36 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'phone_whatsapp.regex' => 'El número de WhatsApp debe tener 8 dígitos, opcionalmente precedido por el código de país 505.',
+            'name.required' => 'Escribe tu nombre completo.',
+            'name.min' => 'El nombre debe tener al menos 3 caracteres.',
+            'name.max' => 'El nombre no puede superar los 120 caracteres.',
+            'name.regex' => 'El nombre solo puede incluir letras, espacios, puntos, apóstrofes y guiones.',
+
+            'email.required' => 'Escribe tu correo electrónico.',
+            'email.email' => 'Escribe un correo electrónico válido.',
+            'email.max' => 'El correo electrónico no puede superar los 255 caracteres.',
+            'email.unique' => 'Ya existe otra cuenta con este correo electrónico.',
+
+            'bio.max' => 'La descripción personal no puede superar los 1000 caracteres.',
+
+            'phone_whatsapp.required' => 'Escribe tu número de WhatsApp.',
+            'phone_whatsapp.regex' => 'Escribe un número de WhatsApp válido de 8 dígitos, por ejemplo 8888 8888.',
         ];
     }
 
     /**
-     * Strip every non-digit character and prepend the country code when omitted.
+     * Get human readable attribute names.
+     *
+     * @return array<string, string>
      */
-    private function normalizePhone(mixed $value): string
+    public function attributes(): array
     {
-        if (! is_string($value)) {
-            return '';
-        }
-
-        $digits = preg_replace('/\D+/', '', $value) ?? '';
-
-        if (strlen($digits) === 8) {
-            return '505'.$digits;
-        }
-
-        return $digits;
+        return [
+            'name' => 'nombre',
+            'email' => 'correo electrónico',
+            'bio' => 'descripción personal',
+            'phone_whatsapp' => 'WhatsApp',
+        ];
     }
 
     /**

@@ -72,6 +72,7 @@ INATEC Emprende centraliza en un solo catálogo público los proyectos desarroll
 ### Panel del estudiante (autenticado)
 
 - Tablero con métricas por estado: total, publicados, borradores y suspendidos.
+- Gestión del perfil propio: nombre, correo, WhatsApp, descripción personal y contraseña (con verificación de la contraseña actual).
 - Crear, editar y eliminar proyectos propios.
 - Cambio de estado entre `draft` y `published`.
 - Generación automática de `slug` único (considera proyectos con *soft delete*).
@@ -207,6 +208,10 @@ Las restricciones se aplican con `ProjectPolicy` y `UserPolicy` (prevención de 
 | GET/POST | `/login`, `/register`, `/forgot-password`, `/reset-password/{token}` | — | Invitado |
 | POST | `/logout` | `logout` | Autenticado |
 | GET | `/dashboard` | `dashboard` | Autenticado |
+| GET | `/profile` | `profile.show` | Autenticado |
+| GET | `/profile/edit` | `profile.edit` | Autenticado |
+| PUT | `/profile` | `profile.update` | Autenticado |
+| PUT | `/profile/password` | `profile.password.update` | Autenticado |
 | GET/POST | `/dashboard/projects/create`, `/dashboard/projects` | `projects.create`, `projects.store` | Autenticado |
 | GET/PUT/DELETE | `/dashboard/projects/{project}/edit`, `/dashboard/projects/{project}` | `projects.edit`, `projects.update`, `projects.destroy` | Autor / admin |
 | GET | `/admin/users` | `admin.users.index` | Admin |
@@ -299,6 +304,7 @@ npm run dev                         # Vite en modo desarrollo
 | `tests/Feature/PublicPortalTest.php` | Catálogo, filtros, visibilidad por estado y acceso a ficha |
 | `tests/Feature/DashboardTest.php` | Tablero del estudiante y métricas por estado |
 | `tests/Feature/Auth/*` | Login, registro con perfil institucional y restablecimiento de contraseña |
+| `tests/Feature/ProfileTest.php` | Perfil propio: datos, WhatsApp normalizado y cambio de contraseña |
 
 ```bash
 php artisan test
@@ -313,6 +319,7 @@ php artisan test --filter=PublicPortalTest
 - Tipado estricto de retornos y parámetros; constantes tipadas (`public const string`).
 - Atributos modernos de Eloquent: `#[Fillable]`, `#[Hidden]`, `#[UsePolicy]`, `#[ObservedBy]`, `#[Scope]`.
 - Validación, saneamiento y normalización exclusivamente en `app/Http/Requests`.
+- **WhatsApp:** el estudiante escribe 8 dígitos nacionales (`[578]\d{7}`); `App\Support\WhatsAppNumber` centraliza la normalización a `505XXXXXXXX` y el campo (`x-ui.phone-input`) bloquea cualquier carácter no numérico en tiempo real.
 - Prohibido el acceso directo a archivos sin pasar por `Storage`.
 - Mensajes de interfaz y validación en español (`lang/es`).
 - Formato con Laravel Pint antes de cada commit.
@@ -346,9 +353,9 @@ La ruta se declara en `.env` mediante `SKILLS_PATH` y se replica en `.env.exampl
 | Autenticación y registro con perfil institucional | ✅ Implementado |
 | CRUD de proyectos del estudiante y métricas | ✅ Implementado |
 | Borrado físico de imágenes (observer) | ✅ Implementado |
+| Perfil del estudiante (datos, WhatsApp y contraseña) | ✅ Implementado |
 | Panel de administración (usuarios y roles) | ⚠️ Controlador y rutas listos; vistas pendientes |
 | Gestión de galería desde la interfaz | ⚠️ Modelo y relación listos; UI pendiente |
-| Edición del perfil del estudiante | ⚠️ `ProfileUpdateRequest` listo; controlador y rutas pendientes |
 | Moderación de proyectos (`suspended`) | ⚠️ Soportado en modelo y policy; acción de admin pendiente |
 
 > Nota de consistencia: `AGENTS.md` menciona Laravel 11 y PHP 8.4; el `composer.json` fijado resuelve **Laravel 13.38** sobre **PHP 8.5**. Este README refleja el estado real del código.

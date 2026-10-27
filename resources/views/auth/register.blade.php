@@ -98,16 +98,11 @@
                     required
                 />
 
-                <x-ui.input
+                <x-ui.phone-input
                     name="phone_whatsapp"
                     label="WhatsApp"
-                    type="tel"
-                    prefix="+505"
-                    autocomplete="tel-national"
-                    inputmode="numeric"
-                    placeholder="8888 8888"
-                    hint="Solo se muestra en el botón de contacto de los proyectos que publiques."
-                    maxlength="12"
+                    placeholder="88888888"
+                    hint="8 dígitos, sin el código de país. Solo se muestra en el botón de contacto de los proyectos que publiques."
                     required
                 />
 

@@ -21,7 +21,7 @@
         </span>
         @unless ($compact)
             <span class="mt-1 text-[0.625rem] leading-none font-medium tracking-[0.12em] whitespace-nowrap text-slate-400 uppercase">
-                Portal de proyectos
+                Portal de emprendimientos
             </span>
         @endunless
     </span>

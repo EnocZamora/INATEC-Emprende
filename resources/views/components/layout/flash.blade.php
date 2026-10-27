@@ -8,16 +8,24 @@
 
     $messages = [
         'project-created' => [
-            'title' => 'Proyecto creado',
+            'title' => 'Emprendimiento creado',
             'body' => 'Ya aparece en tu panel. Revísalo y publícalo cuando esté listo.',
         ],
         'project-updated' => [
             'title' => 'Cambios guardados',
-            'body' => 'La información pública del proyecto ya está actualizada.',
+            'body' => 'La información pública del emprendimiento ya está actualizada.',
         ],
         'project-deleted' => [
-            'title' => 'Proyecto eliminado',
+            'title' => 'Emprendimiento eliminado',
             'body' => 'Ya no aparece en el catálogo ni en tu panel.',
+        ],
+        'profile-updated' => [
+            'title' => 'Perfil actualizado',
+            'body' => 'Tus datos de contacto ya están vigentes en los emprendimientos que publicaste.',
+        ],
+        'password-updated' => [
+            'title' => 'Contraseña actualizada',
+            'body' => 'Usa la nueva contraseña la próxima vez que inicies sesión.',
         ],
     ];
 

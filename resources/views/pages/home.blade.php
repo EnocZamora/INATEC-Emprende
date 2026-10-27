@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', 'Proyectos estudiantiles de Nicaragua')
-@section('description', 'Explora los proyectos de los centros tecnológicos de INATEC por especialidad, centro o departamento y contacta directamente a sus autores por WhatsApp.')
+@section('title', 'Emprendimientos técnicos de Nicaragua')
+@section('description', 'Explora los emprendimientos de egresados certificados por INATEC, filtra por especialidad, centro o departamento y contacta directamente a sus autores por WhatsApp.')
 
 @section('content')
     @php
@@ -21,11 +21,11 @@
                     </p>
 
                     <h1 class="mt-5 text-[2.5rem] leading-[1.06] font-semibold tracking-[-0.035em] text-balance text-slate-900 sm:text-[3.25rem] lg:text-[3.5rem]">
-                        Proyectos estudiantiles que ya resuelven problemas reales.
+                        Emprendimientos técnicos que ya resuelven problemas reales.
                     </h1>
 
                     <p class="mt-5 max-w-[34rem] text-pretty text-[1rem] leading-7 text-slate-600">
-                        El catálogo institucional de los centros tecnológicos de INATEC. Explora por especialidad, centro o departamento y habla directamente con las y los estudiantes que están detrás de cada proyecto.
+                        El catálogo institucional de los centros tecnológicos de INATEC. Explora por especialidad, centro o departamento y habla directamente con los egresados certificados que están detrás de cada emprendimiento.
                     </p>
 
                     <div class="mt-8 flex flex-col gap-2.5 sm:flex-row sm:items-center">
@@ -34,7 +34,7 @@
                         </x-ui.button>
 
                         <x-ui.button href="{{ $ctaUrl }}" size="lg" variant="secondary" icon="plus">
-                            Publicar mi proyecto
+                            Publicar mi emprendimiento
                         </x-ui.button>
                     </div>
 
@@ -49,7 +49,7 @@
                         </li>
                         <li class="flex items-center gap-1.5">
                             <x-ui.icon name="check" class="h-3.5 w-3.5 text-blue-700" />
-                            Proyectos de estudiantes INATEC
+                            Egresados certificados por INATEC
                         </li>
                     </ul>
                 </div>
@@ -70,7 +70,7 @@
                                     {{ number_format($total, 0, ',', '.') }}
                                 </p>
                                 <p class="mt-2 text-[0.8125rem] text-slate-500">
-                                    {{ $total === 1 ? 'proyecto publicado' : 'proyectos publicados' }}
+                                    {{ $total === 1 ? 'emprendimiento publicado' : 'emprendimientos publicados' }}
                                 </p>
                             </div>
 
@@ -126,7 +126,7 @@
                 </h2>
 
                 <p class="mt-3 text-[0.9375rem] leading-6 text-slate-600">
-                    El recorrido es corto y transparente: la cuenta es institucional, el proyecto lo administra su autor y el contacto ocurre sin intermediarios.
+                    El recorrido es corto y transparente: la cuenta es institucional, el emprendimiento lo administra su autor y el contacto ocurre sin intermediarios.
                 </p>
             </div>
 
@@ -141,7 +141,7 @@
 
                     <h3 class="mt-4 text-[0.9375rem] font-semibold text-slate-900">Crea tu cuenta institucional</h3>
                     <p class="mt-1.5 text-[0.8125rem] leading-6 text-slate-500">
-                        Regístrate con tu centro y carrera. El acceso está reservado a estudiantes y personal de INATEC.
+                        Regístrate con tu centro y carrera. El acceso está reservado a egresados certificados y personal de INATEC.
                     </p>
                 </div>
 
@@ -153,9 +153,9 @@
                         </span>
                     </div>
 
-                    <h3 class="mt-4 text-[0.9375rem] font-semibold text-slate-900">Publica tu proyecto</h3>
+                    <h3 class="mt-4 text-[0.9375rem] font-semibold text-slate-900">Publica tu emprendimiento</h3>
                     <p class="mt-1.5 text-[0.8125rem] leading-6 text-slate-500">
-                        Título, descripción, categoría y una portada. Puedes guardarlo como borrador y publicarlo cuando esté listo.
+                        Título, descripción, especialidad y una portada. Puedes guardarlo como borrador y publicarlo cuando esté listo.
                     </p>
                 </div>
 
@@ -169,7 +169,7 @@
 
                     <h3 class="mt-4 text-[0.9375rem] font-semibold text-slate-900">Recibe contacto directo</h3>
                     <p class="mt-1.5 text-[0.8125rem] leading-6 text-slate-500">
-                        Quien se interese te escribe por WhatsApp con el nombre del proyecto en el mensaje. Sin comisiones.
+                        Quien se interese te escribe por WhatsApp con el nombre del emprendimiento en el mensaje. Sin comisiones.
                     </p>
                 </div>
             </div>
@@ -184,7 +184,7 @@
                     <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-700 uppercase">Catálogo</p>
 
                     <h2 class="mt-2.5 text-[1.75rem] leading-[1.15] font-semibold tracking-[-0.025em] text-slate-900 sm:text-[2rem]">
-                        Proyectos publicados
+                        Emprendimientos publicados
                     </h2>
 
                     <p class="mt-2 max-w-xl text-[0.875rem] leading-6 text-slate-500">
@@ -212,11 +212,11 @@
             @if ($featured->isEmpty())
                 <x-ui.empty-state
                     icon="grid"
-                    title="El catálogo está esperando su primer proyecto."
-                    description="Si estudias en un centro tecnológico de INATEC, publica tu proyecto y aparecerá aquí para que toda la comunidad pueda conocerlo."
+                    title="El catálogo está esperando su primer emprendimiento."
+                    description="Si eres egresado certificado de un centro tecnológico de INATEC, publica tu emprendimiento y aparecerá aquí para que toda la comunidad pueda conocerlo."
                     class="mt-7"
                 >
-                    <x-ui.button href="{{ $ctaUrl }}" icon="plus">Publicar mi proyecto</x-ui.button>
+                    <x-ui.button href="{{ $ctaUrl }}" icon="plus">Publicar mi emprendimiento</x-ui.button>
                 </x-ui.empty-state>
             @else
                 <div class="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -228,7 +228,7 @@
                 @if ($total > $featured->count())
                     <div class="mt-8 flex items-center justify-center">
                         <a href="{{ route('catalog.index') }}" class="group inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[0.8125rem] font-medium text-blue-700 underline-offset-4 transition-colors duration-150 hover:text-blue-800 hover:underline">
-                            Ver los {{ $total }} proyectos del catálogo
+                            Ver los {{ $total }} emprendimientos del catálogo
                             <x-ui.icon name="arrow-right" class="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
                         </a>
                     </div>
@@ -243,10 +243,10 @@
             <div class="rounded-2xl bg-blue-700 px-6 py-10 sm:px-10 sm:py-12">
                 <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-14">
                     <div class="max-w-2xl">
-                        <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-200 uppercase">Para estudiantes</p>
+                        <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-200 uppercase">Para egresados</p>
 
                         <h2 class="mt-3 text-[1.75rem] leading-[1.15] font-semibold tracking-[-0.025em] text-balance text-white sm:text-[2.125rem]">
-                            Tu proyecto merece salir del aula.
+                            Tu formación técnica merece un escaparate a su altura.
                         </h2>
 
                         <p class="mt-3 max-w-xl text-[0.9375rem] leading-6 text-blue-100">
@@ -256,7 +256,7 @@
 
                     <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center lg:flex-col lg:items-stretch">
                         <x-ui.button href="{{ $ctaUrl }}" variant="white" size="lg" icon="plus">
-                            Publicar mi proyecto
+                            Publicar mi emprendimiento
                         </x-ui.button>
 
                         <a href="{{ route('terms') }}" class="inline-flex items-center justify-center rounded-lg px-3 py-2 text-[0.8125rem] font-medium text-blue-100 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline">

@@ -143,11 +143,15 @@ class CatalogController extends Controller
 
     /**
      * Read a trimmed string query parameter without risking array input.
+     *
+     * The 150-character ceiling matches the longest searchable column
+     * (`projects.title`) and keeps an oversized query from reaching the
+     * `LIKE` clause.
      */
     private function queryString(Request $request, string $key): string
     {
         $value = $request->query($key);
 
-        return is_string($value) ? trim($value) : '';
+        return is_string($value) ? mb_substr(trim($value), 0, 150) : '';
     }
 }

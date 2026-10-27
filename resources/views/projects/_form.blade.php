@@ -295,7 +295,10 @@
                     </p>
 
                     <p class="mt-2 text-[0.6875rem] leading-5 text-slate-500">
-                        Pide a la coordinación de tu centro tecnológico que complete tu ficha.
+                        <a href="{{ route('profile.edit') }}" class="rounded-sm font-medium text-blue-700 underline-offset-4 transition-colors duration-150 hover:text-blue-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/40 focus-visible:ring-offset-2">
+                            Agrega tu número en tu perfil
+                        </a>
+                        para que los visitantes puedan contactarte.
                     </p>
                 @endif
             </div>

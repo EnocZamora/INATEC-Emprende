@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /*
+     | Motion tokens.
+     |
+     | The built-in CSS easings are too weak for deliberate UI: they lack the
+     | punch that makes a 150ms state change feel intentional. These override
+     | Tailwind's defaults so `ease-out` and `ease-in-out` are always strong.
+     */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@layer base {
+    html {
+        /* Kill the gray flash on tap; every control has its own :active state. */
+        -webkit-tap-highlight-color: transparent;
+        -webkit-text-size-adjust: 100%;
+        /* Light theme is a product decision, not an OS preference. */
+        color-scheme: light;
+        scroll-behavior: smooth;
+    }
+
+    ::selection {
+        background-color: var(--color-blue-200);
+        color: var(--color-slate-900);
+    }
+
+    /*
+     | Motion that is decorative must not fight a vestibular disorder. Colour and
+     | opacity changes stay (they aid comprehension); movement is neutralised by
+     | the component-level `motion-reduce` classes and this global backstop.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* Alpine hides the flash of uninitialised bindings. */
+    [x-cloak] {
+        display: none !important;
+    }
+
+    /*
+     | Filter card accordion. The panel is collapsed on touch-sized screens and
+     | always open from the desktop breakpoint, without fighting Tailwind's
+     | display utilities from an Alpine class binding.
+     */
+    #filtros-panel {
+        display: none;
+    }
+
+    #filtros-panel.is-open {
+        display: block;
+    }
+
+    @media (min-width: 64rem) {
+        #filtros-panel {
+            display: block;
+        }
+    }
+
+    /*
+     | Chrome paints its own yellow surface into autofilled fields. Override it
+     | so a saved credential does not break the neutral surface.
+     */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--color-slate-900);
+        -webkit-box-shadow: 0 0 0 1000px var(--color-white) inset;
+        caret-color: var(--color-slate-900);
+        transition: background-color 9999s ease-out 0s;
+    }
+}

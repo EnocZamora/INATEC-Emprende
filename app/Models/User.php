@@ -58,6 +58,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Public avatar URL. Administrators always fall back to their initials.
+     */
+    public function avatarUrl(): ?string
+    {
+        return $this->isStudent() ? $this->profile?->avatar_url : null;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\ProfileObserver;
 use App\Support\WhatsAppNumber;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['user_id', 'center_id', 'career_id', 'phone_whatsapp', 'bio'])]
+#[Fillable(['user_id', 'center_id', 'career_id', 'phone_whatsapp', 'bio', 'avatar_path', 'banner_path'])]
+#[ObservedBy(ProfileObserver::class)]
 class UserProfile extends Model
 {
     /**
@@ -64,6 +68,32 @@ class UserProfile extends Model
 
             return '+'.$national;
         });
+    }
+
+    /**
+     * Public URL of the profile photo, resolved from the stored relative path.
+     */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->publicMediaUrl($this->avatar_path));
+    }
+
+    /**
+     * Public URL of the profile cover, resolved from the stored relative path.
+     */
+    protected function bannerUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->publicMediaUrl($this->banner_path));
+    }
+
+    /**
+     * Resolve a stored path against the public disk without exposing the disk.
+     */
+    private function publicMediaUrl(mixed $path): ?string
+    {
+        return is_string($path) && $path !== ''
+            ? Storage::disk('public')->url($path)
+            : null;
     }
 
     /**

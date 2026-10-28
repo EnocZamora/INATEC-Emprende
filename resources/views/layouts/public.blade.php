@@ -97,7 +97,7 @@
                             aria-haspopup="menu"
                             class="flex items-center gap-2 rounded-full border border-slate-200/90 bg-white py-1 ps-1 pe-2 outline-none transition-[border-color,background-color] duration-150 hover:border-slate-300 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-600/40 focus-visible:ring-offset-2 motion-safe:active:scale-[0.98]"
                         >
-                            <x-ui.avatar :name="$user->name" size="sm" />
+                            <x-ui.avatar :name="$user->name" :src="$user->avatarUrl()" size="sm" />
 
                             <span class="hidden max-w-24 truncate text-[0.8125rem] font-medium text-slate-700 sm:block">
                                 {{ $user->name }}

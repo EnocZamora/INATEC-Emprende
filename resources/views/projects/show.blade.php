@@ -70,7 +70,7 @@
 
             <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.75rem] text-slate-500">
                 <span class="flex items-center gap-2">
-                    <x-ui.avatar :name="$owner?->name ?? 'INATEC'" size="xs" />
+                    <x-ui.avatar :name="$owner?->name ?? 'INATEC'" :src="$owner?->avatarUrl()" size="xs" />
                     <span class="font-medium text-slate-700">{{ $owner?->name ?? 'Estudiante INATEC' }}</span>
                 </span>
 
@@ -169,7 +169,7 @@
 
                     <div class="p-4">
                         <div class="flex items-center gap-3">
-                            <x-ui.avatar :name="$owner?->name ?? 'INATEC'" size="lg" />
+                            <x-ui.avatar :name="$owner?->name ?? 'INATEC'" :src="$owner?->avatarUrl()" size="lg" />
 
                             <div class="min-w-0">
                                 <p class="truncate text-[0.875rem] font-semibold text-slate-900">{{ $owner?->name ?? 'Estudiante INATEC' }}</p>

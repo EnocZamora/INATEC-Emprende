@@ -66,6 +66,14 @@ class UserController extends Controller
             'role' => $request->validated('role'),
         ]);
 
+        // Administrators must not keep profile media, so a promotion clears
+        // both paths and ProfileObserver removes the files from the disk.
+        if ($user->isAdmin()) {
+            $user->profile()
+                ->first()
+                ?->update(['avatar_path' => null, 'banner_path' => null]);
+        }
+
         return back()->with('status', 'user-role-updated');
     }
 
@@ -81,6 +89,10 @@ class UserController extends Controller
                 ->withTrashed()
                 ->get()
                 ->each(fn (Project $project) => $project->forceDelete());
+
+            // Delete the profile through Eloquent so ProfileObserver can
+            // remove its avatar and banner; a FK cascade would skip events.
+            $user->profile()->first()?->delete();
 
             $user->delete();
         });

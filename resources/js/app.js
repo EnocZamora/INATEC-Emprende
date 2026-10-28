@@ -247,11 +247,13 @@ Alpine.data('coverField', ({ current = null } = {}) => ({
     filesize: null,
     error: null,
     objectUrl: null,
+    removed: false,
 
     choose(event) {
         const file = event.target.files?.[0];
 
         this.error = null;
+        this.removed = false;
 
         if (!file) {
             return;
@@ -282,10 +284,37 @@ Alpine.data('coverField', ({ current = null } = {}) => ({
         this.filename = null;
         this.filesize = null;
         this.error = null;
+        this.removed = false;
 
         if (this.$refs.cover) {
             this.$refs.cover.value = '';
         }
+    },
+
+    /**
+     * Mark the current image for deletion on save. The preview disappears
+     * immediately so the intent is visible before the round trip.
+     */
+    remove() {
+        this.release();
+        this.preview = null;
+        this.filename = null;
+        this.filesize = null;
+        this.error = null;
+        this.removed = true;
+
+        if (this.$refs.cover) {
+            this.$refs.cover.value = '';
+        }
+    },
+
+    undo() {
+        this.release();
+        this.preview = current;
+        this.filename = null;
+        this.filesize = null;
+        this.error = null;
+        this.removed = false;
     },
 
     format(bytes) {

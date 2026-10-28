@@ -71,6 +71,14 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $mediaRules = $this->user()?->isStudent() ?? false
+            ? ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp']
+            : ['prohibited'];
+
+        $removalRules = $this->user()?->isStudent() ?? false
+            ? ['nullable', 'boolean']
+            : ['prohibited'];
+
         return [
             'name' => [
                 'required',
@@ -93,6 +101,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:20',
                 'regex:'.WhatsAppNumber::STORED_PATTERN,
             ],
+            'avatar' => $mediaRules,
+            'banner' => $mediaRules,
+            'remove_avatar' => $removalRules,
+            'remove_banner' => $removalRules,
         ];
     }
 
@@ -118,6 +130,15 @@ class ProfileUpdateRequest extends FormRequest
 
             'phone_whatsapp.required' => 'Escribe tu número de WhatsApp.',
             'phone_whatsapp.regex' => 'Escribe un número de WhatsApp válido de 8 dígitos, por ejemplo 8888 8888.',
+
+            'avatar.image' => 'La foto de perfil debe ser una imagen.',
+            'avatar.max' => 'La foto de perfil no puede superar los 2 MB.',
+            'avatar.mimes' => 'La foto de perfil debe ser un archivo JPG, PNG o WebP.',
+            'avatar.prohibited' => 'Las cuentas administrativas no pueden tener foto de perfil.',
+            'banner.image' => 'La portada del perfil debe ser una imagen.',
+            'banner.max' => 'La portada del perfil no puede superar los 2 MB.',
+            'banner.mimes' => 'La portada del perfil debe ser un archivo JPG, PNG o WebP.',
+            'banner.prohibited' => 'Las cuentas administrativas no pueden tener portada de perfil.',
         ];
     }
 
@@ -133,6 +154,8 @@ class ProfileUpdateRequest extends FormRequest
             'email' => 'correo electrónico',
             'bio' => 'descripción personal',
             'phone_whatsapp' => 'WhatsApp',
+            'avatar' => 'foto de perfil',
+            'banner' => 'portada del perfil',
         ];
     }
 

@@ -5,7 +5,7 @@
 
 @section('content')
     @php
-        $profileErrorKeys = ['name', 'email', 'phone_whatsapp', 'bio'];
+        $profileErrorKeys = ['name', 'email', 'phone_whatsapp', 'bio', 'avatar', 'banner', 'remove_avatar', 'remove_banner'];
         $passwordErrorKeys = ['current_password', 'password'];
 
         $profileErrors = collect($profileErrorKeys)->flatMap(fn (string $key): array => $errors->get($key))->all();
@@ -53,6 +53,7 @@
                 <form
                     method="POST"
                     action="{{ route('profile.update') }}"
+                    enctype="multipart/form-data"
                     x-data="{ submitting: false }"
                     @submit="submitting = true"
                     :aria-busy="submitting"
@@ -73,6 +74,42 @@
                     @endif
 
                     <div class="space-y-4">
+                        @if ($user->isStudent())
+                            <section id="apariencia" class="scroll-mt-24 rounded-xl border border-slate-200/80 bg-white p-5 sm:p-6" aria-labelledby="apariencia-titulo">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <h2 id="apariencia-titulo" class="text-[0.9375rem] font-semibold tracking-[-0.01em] text-slate-900">Imagen de perfil</h2>
+                                        <p class="mt-1 text-[0.75rem] leading-5 text-slate-500">
+                                            Tu foto y tu portada solo aparecen en tu ficha de estudiante.
+                                        </p>
+                                    </div>
+
+                                    <x-ui.badge variant="neutral">Opcional</x-ui.badge>
+                                </div>
+
+                                <div class="mt-5 space-y-5">
+                                    <x-profile.banner-upload :current="$profile?->banner_url" />
+
+                                    <div class="border-t border-slate-100 pt-5">
+                                        <x-profile.avatar-upload :name="$user->name" :current="$profile?->avatar_url" />
+                                    </div>
+                                </div>
+                            </section>
+                        @else
+                            <section class="rounded-xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6" aria-labelledby="apariencia-admin">
+                                <div class="flex items-start gap-2.5">
+                                    <x-ui.icon name="shield-check" class="mt-px h-4 w-4 shrink-0 text-slate-400" />
+
+                                    <div>
+                                        <h2 id="apariencia-admin" class="text-[0.8125rem] font-semibold text-slate-800">Imagen de perfil reservada</h2>
+                                        <p class="mt-1 text-[0.75rem] leading-5 text-slate-500">
+                                            Las cuentas administrativas no usan foto ni portada: su identidad se muestra con las iniciales del nombre.
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+                        @endif
+
                         <section class="rounded-xl border border-slate-200/80 bg-white p-5 sm:p-6">
                             <div class="flex items-start justify-between gap-4">
                                 <div>
@@ -272,7 +309,11 @@
                     <p class="text-[0.625rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">Así se ve tu contacto</p>
 
                     <div class="mt-3 flex items-center gap-3">
-                        <x-ui.avatar :name="$user->name" size="md" />
+                        <x-ui.avatar
+                            :name="$user->name"
+                            :src="$user->avatarUrl()"
+                            size="md"
+                        />
 
                         <div class="min-w-0">
                             <p class="truncate text-[0.8125rem] font-semibold text-slate-900">{{ $user->name }}</p>

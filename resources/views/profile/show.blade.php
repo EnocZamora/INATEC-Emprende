@@ -20,6 +20,10 @@
             $profile?->center?->municipality?->department?->name,
         ])->filter()->unique()->implode(', ');
 
+        $canManageMedia = $user->isStudent();
+        $bannerUrl = $canManageMedia ? $profile?->banner_url : null;
+        $avatarUrl = $canManageMedia ? $profile?->avatar_url : null;
+
         $statCards = [
             ['label' => 'Proyectos', 'value' => $stats['total'], 'hint' => 'en total', 'tone' => 'text-slate-900'],
             ['label' => 'Publicados', 'value' => $stats['published'], 'hint' => 'visibles en el catálogo', 'tone' => 'text-blue-700'],
@@ -28,33 +32,77 @@
         ];
     @endphp
 
-    <section class="border-b border-slate-200/80 bg-slate-50/60">
+    <section class="relative isolate overflow-hidden border-b border-slate-900/10 bg-slate-950">
+        {{-- The gradient stays underneath so a missing file never shows a broken banner. --}}
+        <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgb(37_99_235/0.35),transparent_45%),radial-gradient(circle_at_85%_0%,rgb(14_165_233/0.25),transparent_40%),linear-gradient(135deg,#020617,#0f172a_55%,#1e293b)]"></div>
+        <div class="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(to_right,rgb(148_163_184/0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgb(148_163_184/0.12)_1px,transparent_1px)] [background-size:48px_48px]"></div>
+
+        @if ($bannerUrl)
+            <img
+                src="{{ $bannerUrl }}"
+                alt=""
+                class="absolute inset-0 -z-10 h-full w-full object-cover"
+                fetchpriority="high"
+                decoding="async"
+                onerror="this.remove()"
+            >
+            <div class="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/90 via-slate-950/55 to-slate-950/20"></div>
+        @endif
+
         <div class="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-            <nav class="flex flex-wrap items-center gap-1.5 text-[0.6875rem] font-medium text-slate-500" aria-label="Ruta de navegación">
-                <a href="{{ route('home') }}" class="rounded-sm underline-offset-4 transition-colors duration-150 hover:text-slate-900 hover:underline">Inicio</a>
-                <x-ui.icon name="chevron-right" class="h-3 w-3 text-slate-300" />
-                <span class="text-slate-700" aria-current="page">Mi perfil</span>
+            <nav class="flex flex-wrap items-center gap-1.5 text-[0.6875rem] font-medium text-white/55" aria-label="Ruta de navegación">
+                <a href="{{ route('home') }}" class="rounded-sm underline-offset-4 transition-colors duration-150 hover:text-white hover:underline">Inicio</a>
+                <x-ui.icon name="chevron-right" class="h-3 w-3 text-white/25" />
+                <span class="text-white/85" aria-current="page">Mi perfil</span>
             </nav>
 
-            <div class="mt-4 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <div class="max-w-2xl">
-                    <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-700 uppercase">Cuenta institucional</p>
+            <div class="mt-6 flex flex-col gap-6 sm:mt-8 sm:flex-row sm:items-end sm:justify-between">
+                <div class="flex min-w-0 items-center gap-4 sm:gap-5">
+                    <div class="group relative shrink-0">
+                        <x-ui.avatar
+                            :name="$user->name"
+                            :src="$avatarUrl"
+                            size="2xl"
+                            tone="white"
+                            loading="eager"
+                            decoding="async"
+                            class="h-20 w-20 border-2 border-white/25 shadow-[0_18px_40px_-18px_rgb(0_0_0/0.85)] sm:h-24 sm:w-24"
+                        />
 
-                    <h1 class="mt-2 text-[1.875rem] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-slate-900 sm:text-[2.25rem]">
-                        {{ $user->name }}
-                    </h1>
+                        @if ($canManageMedia)
+                            <a
+                                href="{{ route('profile.edit') }}#apariencia"
+                                class="absolute -end-1 -bottom-1 grid h-8 w-8 place-items-center rounded-full border-4 border-slate-950/70 bg-white text-slate-700 shadow-sm outline-none transition-[transform,background-color,color] duration-150 ease-out hover:bg-blue-50 hover:text-blue-800 focus-visible:ring-2 focus-visible:ring-white/70 motion-safe:active:scale-95"
+                                aria-label="Cambiar foto o portada del perfil"
+                            >
+                                <x-ui.icon name="camera" class="h-4 w-4" />
+                            </a>
+                        @endif
+                    </div>
 
-                    <p class="mt-2.5 text-[0.9375rem] leading-6 text-slate-600">
-                        Tu ficha institucional, el número de contacto que ven los visitantes y el estado de tu cuenta.
-                    </p>
+                    <div class="min-w-0">
+                        <p class="text-[0.6875rem] font-semibold tracking-[0.16em] text-blue-200 uppercase">Cuenta institucional</p>
+
+                        <h1 class="mt-1.5 text-[1.875rem] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-white sm:text-[2.25rem]">
+                            {{ $user->name }}
+                        </h1>
+
+                        <p class="mt-1.5 max-w-xl text-[0.875rem] leading-6 text-white/70">
+                            Tu ficha institucional, el número de contacto que ven los visitantes y el estado de tu cuenta.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <x-ui.button href="{{ route('dashboard') }}" variant="secondary" size="sm" icon="grid">
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-[0.8125rem] font-medium text-white/75 outline-none transition-[background-color,color,transform] duration-150 ease-out hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 motion-safe:active:scale-[0.98]"
+                    >
+                        <x-ui.icon name="grid" class="h-3.5 w-3.5 opacity-90" />
                         Mi panel
-                    </x-ui.button>
+                    </a>
 
-                    <x-ui.button href="{{ route('profile.edit') }}" size="sm" icon="pencil-square">
+                    <x-ui.button href="{{ route('profile.edit') }}" variant="white" size="sm" icon="pencil-square">
                         Editar perfil
                     </x-ui.button>
                 </div>
@@ -68,7 +116,7 @@
                 <section class="rounded-xl border border-slate-200/80 bg-white p-5 sm:p-6" aria-labelledby="identidad">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div class="flex min-w-0 items-center gap-3.5">
-                            <x-ui.avatar :name="$user->name" size="lg" />
+                            <x-ui.avatar :name="$user->name" :src="$avatarUrl" size="lg" />
 
                             <div class="min-w-0">
                                 <h2 id="identidad" class="truncate text-[1rem] leading-6 font-semibold tracking-[-0.015em] text-slate-900">

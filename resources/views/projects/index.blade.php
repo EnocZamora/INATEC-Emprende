@@ -221,7 +221,7 @@
                 <div class="rounded-xl border border-slate-200/80 bg-white p-5">
                     <div class="flex items-start justify-between gap-3">
                         <p class="text-[0.625rem] font-semibold tracking-[0.14em] text-slate-500 uppercase">Ficha institucional</p>
-                        <x-ui.avatar :name="$user->name" size="sm" />
+                        <x-ui.avatar :name="$user->name" :src="$user->avatarUrl()" size="sm" />
                     </div>
 
                     <p class="mt-3 text-[0.875rem] font-semibold text-slate-900">{{ $user->name }}</p>

@@ -49,7 +49,7 @@
         </p>
 
         <div class="mt-auto flex items-center gap-2.5 border-t border-slate-100 pt-3.5">
-            <x-ui.avatar :name="$owner?->name ?? 'INATEC'" size="xs" />
+            <x-ui.avatar :name="$owner?->name ?? 'INATEC'" :src="$owner?->avatarUrl()" size="xs" />
 
             <div class="min-w-0">
                 <p class="truncate text-[0.75rem] leading-4 font-medium text-slate-700">

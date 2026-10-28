@@ -8,9 +8,11 @@ use App\Http\Requests\ProfilePasswordUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
@@ -49,19 +51,29 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
+        $canManageMedia = $user->isStudent();
 
-        DB::transaction(function () use ($user, $data): void {
+        DB::transaction(function () use ($request, $user, $data, $canManageMedia): void {
             $user->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
             ]);
 
-            // A profile row exists from registration; updateOrCreate keeps
+            // A profile row exists from registration; firstOrNew keeps
             // administrative accounts (which may lack one) working too.
-            $user->profile()->updateOrCreate([], [
+            $profile = $user->profile()->firstOrNew([]);
+
+            $profile->fill([
                 'phone_whatsapp' => $data['phone_whatsapp'],
                 'bio' => $data['bio'] ?? null,
             ]);
+
+            if ($canManageMedia) {
+                $this->applyMediaField($request, $profile, 'avatar', 'avatar_path', 'profiles/avatars');
+                $this->applyMediaField($request, $profile, 'banner', 'banner_path', 'profiles/banners');
+            }
+
+            $profile->save();
         });
 
         return redirect()
@@ -79,6 +91,32 @@ class ProfileController extends Controller
         ]);
 
         return back()->with('status', 'password-updated');
+    }
+
+    /**
+     * Store, keep or clear one profile image and persist only its relative path.
+     *
+     * A newly selected file always wins over the removal flag. The previous
+     * file is deleted by ProfileObserver once the row has been updated.
+     */
+    private function applyMediaField(
+        ProfileUpdateRequest $request,
+        UserProfile $profile,
+        string $field,
+        string $column,
+        string $directory,
+    ): void {
+        $file = $request->file($field);
+
+        if ($file instanceof UploadedFile) {
+            $profile->setAttribute($column, $file->store($directory, 'public'));
+
+            return;
+        }
+
+        if ($request->boolean('remove_'.$field)) {
+            $profile->setAttribute($column, null);
+        }
     }
 
     /**

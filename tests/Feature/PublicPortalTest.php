@@ -89,6 +89,27 @@ class PublicPortalTest extends TestCase
         $this->get('/register')->assertOk();
     }
 
+    public function test_public_and_auth_layouts_include_lightbulb_favicon_variants(): void
+    {
+        foreach (['/catalog', '/login'] as $path) {
+            $this->get($path)
+                ->assertOk()
+                ->assertSee('/images/logo-lightbulb.svg', false)
+                ->assertSee('/favicon-32.png', false)
+                ->assertSee('/favicon.ico', false)
+                ->assertSee('/favicon-180.png', false);
+        }
+
+        foreach ([
+            public_path('images/logo-lightbulb.svg'),
+            public_path('favicon-32.png'),
+            public_path('favicon-180.png'),
+            public_path('favicon.ico'),
+        ] as $iconPath) {
+            $this->assertFileExists($iconPath);
+        }
+    }
+
     public function test_catalog_only_lists_published_projects(): void
     {
         Project::query()->create([

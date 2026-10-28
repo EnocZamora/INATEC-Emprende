@@ -207,6 +207,20 @@
                         @endif
                     </div>
 
+                    @if ($canManageMedia && $profile?->diploma_url)
+                        <div class="mt-5 border-t border-slate-100 pt-5">
+                            <p class="text-[0.625rem] font-medium tracking-[0.08em] text-slate-400 uppercase">Diploma</p>
+                            <a
+                                href="{{ $profile->diploma_url }}"
+                                target="_blank"
+                                rel="noopener"
+                                class="mt-1.5 inline-flex min-h-9 items-center rounded-md text-[0.8125rem] font-medium text-blue-700 underline-offset-4 outline-none transition-[color,transform] duration-150 ease-out hover:text-blue-800 hover:underline focus-visible:ring-2 focus-visible:ring-blue-600/40 focus-visible:ring-offset-2 motion-safe:active:scale-[0.98] motion-reduce:transition-none"
+                            >
+                                Ver diploma
+                            </a>
+                        </div>
+                    @endif
+
                     @unless ($profileComplete)
                         <x-ui.alert variant="warning" title="Tu ficha está incompleta" class="mt-5">
                             <p>Completa los datos pendientes para que los visitantes puedan contactarte sin intermediarios.</p>

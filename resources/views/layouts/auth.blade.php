@@ -6,6 +6,10 @@
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#ffffff">
     <meta name="description" content="@yield('description', 'Acceso al portal de proyectos estudiantiles de INATEC Emprende.')">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-lightbulb.svg') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon-180.png') }}">
 
     <title>@yield('title', 'Acceso') · INATEC Emprende</title>
 

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['user_id', 'center_id', 'career_id', 'phone_whatsapp', 'bio', 'avatar_path', 'banner_path'])]
+#[Fillable(['user_id', 'center_id', 'career_id', 'phone_whatsapp', 'bio', 'avatar_path', 'banner_path', 'diploma_path'])]
 #[ObservedBy(ProfileObserver::class)]
 class UserProfile extends Model
 {
@@ -84,6 +84,14 @@ class UserProfile extends Model
     protected function bannerUrl(): Attribute
     {
         return Attribute::get(fn (): ?string => $this->publicMediaUrl($this->banner_path));
+    }
+
+    /**
+     * Public URL of the student's diploma, resolved from its stored relative path.
+     */
+    protected function diplomaUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->publicMediaUrl($this->diploma_path));
     }
 
     /**

@@ -99,7 +99,7 @@ Notas:
 5. **Eager loading obligatorio en listados.** Carga con `with()` / `load()` / `loadMissing()` la cadena
    `user.profile.center.municipality.department`, `user.profile.career` y `gallery`. Evita N+1.
 6. **Nunca accedas a archivos directamente.** Usa `Storage::disk('public')` para guardar y borrar.
-   Al reemplazar una portada, avatar o banner, o hacer borrado definitivo, el archivo físico se elimina
+  Al reemplazar una portada, avatar, banner o diploma, o hacer borrado definitivo, el archivo físico se elimina
    (`ProjectObserver` / `ProfileObserver`). La base de datos guarda **solo la ruta relativa**.
 7. **No dupliques el WhatsApp.** La única fuente es `user_profiles.phone_whatsapp`. El enlace se
    construye en el accessor `Project::whatsappUrl`. No agregues una columna de teléfono a `projects`.
@@ -131,19 +131,19 @@ app/
 │   └── Requests/
 │       ├── ProjectStoreRequest.php           # Categorías + slug + saneo XSS
 │       ├── ProjectUpdateRequest.php          # Edición parcial, `suspended` solo admin
-│       ├── ProfileUpdateRequest.php          # Datos + WhatsApp + avatar/banner (solo estudiante)
+│       ├── ProfileUpdateRequest.php          # Datos + WhatsApp + medios del perfil (solo estudiante)
 │       ├── ProfilePasswordUpdateRequest.php  # `current_password`
 │       ├── Admin/UserRoleUpdateRequest.php
 │       └── Auth/                             # Login, registro, reset
 ├── Models/
 │   ├── User.php            # Rol, perfil 1:1, proyectos 1:N, `avatarUrl()`
-│   ├── UserProfile.php     # Centro, carrera, WhatsApp, bio, avatar/banner
+│   ├── UserProfile.php     # Centro, carrera, WhatsApp, bio, avatar/banner/diploma
 │   ├── Project.php         # Slug, estados, soft deletes, `whatsapp_url`
 │   ├── ProjectGallery.php  # Tabla `project_gallery`
 │   ├── Center.php / Career.php / Department.php / Municipality.php
 ├── Observers/
 │   ├── ProjectObserver.php # Borra portada anterior y archivos al forceDelete
-│   └── ProfileObserver.php # Borra avatar/banner anteriores y al eliminar el perfil
+│   └── ProfileObserver.php # Borra medios anteriores y al eliminar el perfil
 ├── Providers/AppServiceProvider.php          # Gate `admin`
 └── Support/WhatsAppNumber.php                # Normalización canónica del teléfono
 
@@ -228,7 +228,7 @@ departments ──< municipalities ──< centers ──< careers
 users ──1:1── user_profiles ───────────────┘
   │                  │
   │                  ├── phone_whatsapp  (única fuente del contacto)
-  │                  └── avatar_path / banner_path (solo estudiantes)
+  │                  └── avatar_path / banner_path / diploma_path (solo estudiantes)
   │
   └──1:N── projects ──1:N── project_gallery
 ```
@@ -242,7 +242,7 @@ users ──1:1── user_profiles ──────────────�
 | `centers` | `id`, `municipality_id`, `name(120)`, `code(20)`, `location(255) null` | FK → `municipalities` **RESTRICT**; `code` único; índice `(municipality_id, name)` |
 | `careers` | `id`, `center_id`, `name(120)` | FK → `centers` **CASCADE**; único `(center_id, name)` |
 | `users` | `id`, `name`, `email` único, `password`, `role` (`student`\|`admin`), `remember_token` | `role` indexado, default `student` |
-| `user_profiles` | `id`, `user_id` único, `center_id`, `career_id`, `phone_whatsapp(20)`, `bio text null`, `avatar_path(255) null`, `banner_path(255) null` | FK usuario **CASCADE**; centro/carrera **RESTRICT**; índice `phone_whatsapp` |
+| `user_profiles` | `id`, `user_id` único, `center_id`, `career_id`, `phone_whatsapp(20)`, `bio text null`, `avatar_path(255) null`, `banner_path(255) null`, `diploma_path(255) null` | FK usuario **CASCADE**; centro/carrera **RESTRICT**; índice `phone_whatsapp` |
 | `projects` | `id`, `user_id`, `title(150)`, `slug(180)` único, `description text`, `category(50)`, `cover_photo(255)`, `status` enum, timestamps, `deleted_at` | FK usuario **CASCADE**; índices `(status, created_at)` y `(category, status)` |
 | `project_gallery` | `id`, `project_id`, `image_path(255)` | FK proyecto **CASCADE**; índice `(project_id, id)` |
 
@@ -259,8 +259,8 @@ Además existen las tablas estándar de Laravel: `password_reset_tokens`, `sessi
 - `projects.user_id` no se actualiza desde la UI: el dueño se fija al crear.
 - `cover_photo` es obligatorio al crear y opcional al editar.
 - `project_gallery` existe como modelo/relación y se muestra en la ficha, pero **no hay UI de carga**.
-- `user_profiles.avatar_path` y `banner_path` guardan **solo la ruta relativa** en el disco `public`
-  (`profiles/avatars/`, `profiles/banners/`). Las cuentas `admin` no pueden tener estos campos.
+- `user_profiles.avatar_path`, `banner_path` y `diploma_path` guardan **solo la ruta relativa** en el disco `public`
+  (`profiles/avatars/`, `profiles/banners/`, `profiles/diplomas/`). Las cuentas `admin` no pueden tener estos campos.
 - Los proyectos usan `SoftDeletes`: el borrado del estudiante es lógico y conserva archivos.
   El borrado definitivo (baja de usuario) dispara `forceDeleting` y elimina archivos.
 
@@ -308,7 +308,7 @@ Tecnología · Agropecuaria · Industria · Turismo · Salud · Servicios · Com
 | Ver catálogo / búsqueda | ✅ | ✅ | ✅ |
 | Ver ficha publicada | ✅ | ✅ | ✅ |
 | Ver borrador/suspendido propio | ❌ | ✅ | ✅ |
-| Foto y portada de perfil | ❌ | ✅ (solo la propia) | ❌ (reservado a estudiantes) |
+| Foto, portada y diploma de perfil | ❌ | ✅ (solo la propia) | ❌ (reservado a estudiantes) |
 | Crear proyecto | ❌ | ✅ | ✅ |
 | Editar / borrar proyecto propio | ❌ | ✅ | ✅ |
 | Editar / borrar proyecto ajeno | ❌ | ❌ | ✅ (policy; sin UI dedicada) |
@@ -388,7 +388,7 @@ Una sola acción sirve tres rutas y elige la vista según el nombre de ruta:
 5. Redirige a `/login` con mensaje de éxito (no inicia sesión automáticamente).
 
 **Nota:** después del registro, el estudiante **no puede cambiar centro ni carrera** desde el perfil;
-el formulario de perfil solo edita nombre, correo, WhatsApp, bio, foto y portada.
+el formulario de perfil solo edita nombre, correo, WhatsApp, bio, foto, portada y diploma.
 
 ### 9.4 Perfil (`ProfileController`)
 
@@ -400,11 +400,13 @@ el formulario de perfil solo edita nombre, correo, WhatsApp, bio, foto y portada
 - `update` → `ProfileUpdateRequest` normaliza y valida; luego, en transacción:
   actualiza `name`/`email` y hace `profile()->firstOrNew([])` con WhatsApp y bio. El `firstOrNew`
   cubre cuentas admin que podrían no tener perfil.
-- **Medios (solo `student`):** `avatar` y `banner` aceptan `image|max:2048|mimes:jpg,jpeg,png,webp`.
+- **Medios (solo `student`):** `avatar` y `banner` aceptan `image|max:2048|mimes:jpg,jpeg,png,webp`; `diploma`
+  es obligatorio mientras `diploma_path` esté vacío y acepta `required|file|mimes:pdf,jpg,jpeg,png|max:2048`.
+  Cuando ya hay una ruta guardada, el archivo es opcional; omitirlo conserva el diploma actual.
   El controlador guarda con `store('profiles/avatars', 'public')` o `store('profiles/banners', 'public')`
-  y persiste únicamente la ruta. Un archivo nuevo gana sobre `remove_avatar`/`remove_banner`; sin archivo,
-  esos flags booleanos ponen la columna en `null`.
-- Para admin, `avatar`, `banner`, `remove_avatar` y `remove_banner` usan `prohibited`: enviar archivos
+  y persiste únicamente la ruta. Un archivo nuevo gana sobre `remove_avatar`/`remove_banner`/`remove_diploma`;
+  sin archivo, esos flags booleanos ponen la columna en `null`. El diploma usa `profiles/diplomas/` y se abre desde el perfil.
+- Para admin, `avatar`, `banner`, `diploma`, `remove_avatar`, `remove_banner` y `remove_diploma` usan `prohibited`: enviar archivos
   produce error de validación (no 403) y el controlador ni siquiera intenta almacenarlos.
 - `updatePassword` → exige `current_password` y actualiza con el cast `hashed` del modelo.
 - El WhatsApp se presenta con `UserProfile::whatsappDisplay` como `+505 XXXX XXXX`.
@@ -433,20 +435,20 @@ Detalles que suelen romperse:
 - El admin puede enviar `suspended` en la edición; un estudiante no.
 - La portada se guarda con `$file->store('projects', 'public')`. **Siempre** pasa el disco `public`.
 
-### 9.6 Ciclo de vida de las imágenes (`ProjectObserver` y `ProfileObserver`)
+### 9.6 Ciclo de vida de archivos (`ProjectObserver` y `ProfileObserver`)
 
 | Evento | Efecto |
 | --- | --- |
 | `ProjectObserver@updated` y `cover_photo` cambió | Borra el archivo anterior del disco `public` (si era una ruta válida y distinta). |
 | `ProjectObserver@forceDeleting` | Borra la portada y todas las rutas de `project_gallery` **antes** de que la cascada elimine las filas. |
 | `ProjectObserver@deleted` (soft delete) | **No borra archivos**: el proyecto puede restaurarse. |
-| `ProfileObserver@updated` y `avatar_path`/`banner_path` cambió | Borra el archivo anterior si era válido y distinto. |
-| `ProfileObserver@deleting` | Borra ambos archivos antes de eliminar la fila del perfil. |
+| `ProfileObserver@updated` y `avatar_path`/`banner_path`/`diploma_path` cambió | Borra el archivo anterior si era válido y distinto. |
+| `ProfileObserver@deleting` | Borra avatar, portada y diploma antes de eliminar la fila del perfil. |
 | Baja de usuario (`Admin\UserController@destroy`) | `forceDelete()` por proyecto → limpia portadas; luego borra el perfil con Eloquent (dispara `ProfileObserver`) y finalmente la cuenta. |
 
-Rutas de archivos: `projects/{nombre-único}.{ext}`, `profiles/avatars/{...}` y
-`profiles/banners/{...}` en `storage/app/public`, servidas por `public/storage`. Validación de subida:
-`image`, `max:2048` (2 MB), `mimes:jpg,jpeg,png,webp`.
+Rutas de archivos: `projects/{nombre-único}.{ext}`, `profiles/avatars/{...}`, `profiles/banners/{...}` y
+  `profiles/diplomas/{...}` en `storage/app/public`, servidas por `public/storage`. Las imágenes aceptan
+`image|max:2048|mimes:jpg,jpeg,png,webp`; el diploma acepta `file|max:2048|mimes:pdf,jpg,jpeg,png|max:2048`.
 
 ### 9.7 Administración (`Admin\UserController`)
 
@@ -455,10 +457,10 @@ Rutas de archivos: `projects/{nombre-único}.{ext}`, `profiles/avatars/{...}` y
   (`student`/`admin`), ordena `latest()`, pagina 15. **Renderiza `admin.users.index`, vista que aún
   no existe** (§14).
 - `updateRole` → `UserRoleUpdateRequest`; `authorize('updateRole')` impide autopromoción. Si el
-  nuevo rol es `admin`, limpia `avatar_path`/`banner_path` del perfil para que `ProfileObserver`
+  nuevo rol es `admin`, limpia `avatar_path`/`banner_path`/`diploma_path` del perfil para que `ProfileObserver`
   borre los archivos.
 - `destroy`: `authorize('delete')`; en transacción hace `forceDelete()` de todos los proyectos
-  (incluidos trashed), elimina el perfil vía Eloquent para que `ProfileObserver` borre avatar/banner
+  (incluidos trashed), elimina el perfil vía Eloquent para que `ProfileObserver` borre todos los medios
   y luego elimina la cuenta. No confíes en la cascada FK para limpiar archivos.
 
 ### 9.8 WhatsApp (`App\Support\WhatsAppNumber`)
@@ -553,13 +555,13 @@ No existen rutas `api/*` (solo el health check `/up`). Los IDs de proyecto en el
 - Configuración: `phpunit.xml` usa SQLite `:memory:`, `CACHE_STORE=array`, `SESSION_DRIVER=array`,
   `QUEUE_CONNECTION=sync`, `MAIL_MAILER=array`.
 - Cada test de feature usa `RefreshDatabase`. `DashboardTest` usa `Storage::fake('public')`.
-- Cobertura actual (86 tests):
+- Cobertura actual (91 tests):
   - `tests/Feature/PublicPortalTest.php`: páginas públicas, solo publicados, filtros por categoría y
     territorio, búsqueda, visibilidad de borradores/suspendidos, totales del home.
   - `tests/Feature/DashboardTest.php`: autenticación, aislamiento por usuario, creación con portada,
     validaciones, actualización sin reemplazar portada, anti-IDOR, soft delete.
   - `tests/Feature/ProfileTest.php`: resumen, actualización de datos/WhatsApp, email único,
-    contraseña, subida de avatar/banner, reemplazo y borrado de archivos, rechazo de admin,
+    contraseña, subida de avatar/banner/diploma, reemplazo y borrado de archivos, rechazo de admin,
     validación de tipo/tamaño y limpieza al eliminar la cuenta.
   - `tests/Feature/Auth/*`: login (normalización, rate limit, logout), registro (carrera→centro,
     WhatsApp, términos), reset de contraseña.
@@ -583,7 +585,7 @@ vendor/bin/pint
 > php -d extension=pdo_sqlite -d extension=fileinfo vendor/bin/phpunit
 > ```
 >
-> Estado de la suite en este entorno: **86 tests, 1 fallo preexistente**:
+> Estado de la suite en este entorno: **91 tests, 1 fallo preexistente**:
 > `PublicPortalTest::test_public_pages_render_without_errors` espera el texto «Proyectos estudiantiles»,
 > que el home actual no muestra (el catálogo dice «Emprendimientos publicados»). Es una expectativa
 > obsoleta del test, no un fallo del catálogo.
@@ -758,7 +760,7 @@ Ver §9.8: toca `WhatsAppNumber`, ambos FormRequests, el componente Blade, `app.
 | `app/Models/User.php` | Rol, perfil, proyectos y `avatarUrl()` (solo estudiantes). |
 | `app/Models/UserProfile.php` | `whatsapp_display`, relaciones territoriales, `avatar_url`/`banner_url`. |
 | `app/Observers/ProjectObserver.php` | Borrado físico de portadas y galería. |
-| `app/Observers/ProfileObserver.php` | Borrado físico de avatar/banner al reemplazar o eliminar. |
+| `app/Observers/ProfileObserver.php` | Borrado físico de avatar/banner/diploma al reemplazar o eliminar. |
 | `app/Support/WhatsAppNumber.php` | Contrato canónico del teléfono. |
 | `app/Providers/AppServiceProvider.php` | Gate `admin`. |
 | `database/migrations/2026_10_24_*.php` | Esquema real y restricciones de integridad. |

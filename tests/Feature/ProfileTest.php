@@ -90,6 +90,7 @@ class ProfileTest extends TestCase
                 'email' => 'ANA.GOMEZ@INATEC.EDU.NI',
                 'phone_whatsapp' => '+505 7777-7777',
                 'bio' => '<b>Soy estudiante</b> de desarrollo de software.',
+                'diploma' => UploadedFile::fake()->create('diploma.pdf', 100, 'application/pdf'),
             ])
             ->assertRedirect(route('profile.show'))
             ->assertSessionHas('status', 'profile-updated');
@@ -206,6 +207,116 @@ class ProfileTest extends TestCase
         Storage::disk('public')->assertExists($this->profile->banner_path);
     }
 
+    public function test_student_can_upload_and_view_a_diploma(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => UploadedFile::fake()->create('diploma.pdf', 200, 'application/pdf'),
+            ]))
+            ->assertRedirect(route('profile.show'))
+            ->assertSessionHasNoErrors();
+
+        $this->profile->refresh();
+
+        $this->assertNotNull($this->profile->diploma_path);
+        $this->assertStringStartsWith('profiles/diplomas/', $this->profile->diploma_path);
+        Storage::disk('public')->assertExists($this->profile->diploma_path);
+
+        $this->actingAs($this->student)
+            ->get(route('profile.show'))
+            ->assertOk()
+            ->assertSee(Storage::disk('public')->url($this->profile->diploma_path), false);
+    }
+
+    public function test_diploma_is_required_until_one_is_stored_then_becomes_optional(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload(['diploma' => null]))
+            ->assertSessionHasErrors('diploma');
+
+        $this->actingAs($this->student)
+            ->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('id="diploma"', false)
+            ->assertSee('Obligatorio');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => UploadedFile::fake()->create('diploma.pdf', 200, 'application/pdf'),
+            ]))
+            ->assertRedirect(route('profile.show'))
+            ->assertSessionHasNoErrors();
+
+        $storedPath = $this->profile->refresh()->diploma_path;
+
+        $this->actingAs($this->student)
+            ->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('Ver diploma actual')
+            ->assertSee('Opcional');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload(['diploma' => null]))
+            ->assertRedirect(route('profile.show'))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame($storedPath, $this->profile->refresh()->diploma_path);
+        Storage::disk('public')->assertExists($storedPath);
+    }
+
+    public function test_replacing_or_removing_a_diploma_deletes_the_previous_file(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('profiles/diplomas/previous.pdf', 'old diploma');
+        $this->profile->update(['diploma_path' => 'profiles/diplomas/previous.pdf']);
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => UploadedFile::fake()->create('new-diploma.pdf', 200, 'application/pdf'),
+            ]))
+            ->assertSessionHasNoErrors();
+
+        $this->profile->refresh();
+        $this->assertNotSame('profiles/diplomas/previous.pdf', $this->profile->diploma_path);
+        Storage::disk('public')->assertMissing('profiles/diplomas/previous.pdf');
+        Storage::disk('public')->assertExists($this->profile->diploma_path);
+
+        $currentPath = $this->profile->diploma_path;
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => null,
+                'remove_diploma' => '1',
+            ]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertNull($this->profile->refresh()->diploma_path);
+        Storage::disk('public')->assertMissing($currentPath);
+    }
+
+    public function test_diploma_must_be_a_pdf_or_supported_image_under_two_megabytes(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => UploadedFile::fake()->create('diploma.txt', 50, 'text/plain'),
+            ]))
+            ->assertSessionHasErrors('diploma');
+
+        $this->actingAs($this->student)
+            ->put(route('profile.update'), $this->payload([
+                'diploma' => UploadedFile::fake()->create('large-diploma.pdf', 3 * 1024, 'application/pdf'),
+            ]))
+            ->assertSessionHasErrors('diploma');
+
+        $this->assertNull($this->profile->refresh()->diploma_path);
+    }
+
     public function test_replacing_profile_media_deletes_the_previous_files(): void
     {
         Storage::fake('public');
@@ -297,11 +408,33 @@ class ProfileTest extends TestCase
                 'phone_whatsapp' => '8888 8888',
                 'avatar' => $this->fakeImage('avatar.png'),
                 'banner' => $this->fakeImage('banner.png'),
+                'diploma' => UploadedFile::fake()->create('diploma.pdf', 100, 'application/pdf'),
             ])
-            ->assertSessionHasErrors(['avatar', 'banner']);
+            ->assertSessionHasErrors(['avatar', 'banner', 'diploma']);
 
         $this->assertNull($admin->profile?->avatar_path);
         $this->assertNull($admin->profile?->banner_path);
+        $this->assertNull($admin->profile?->diploma_path);
+    }
+
+    public function test_admin_can_update_profile_without_student_media(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        UserProfile::query()->create([
+            'user_id' => $admin->id,
+            'center_id' => $this->profile->center_id,
+            'career_id' => $this->profile->career_id,
+            'phone_whatsapp' => '50588888888',
+        ]);
+
+        $this->actingAs($admin)
+            ->put(route('profile.update'), [
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'phone_whatsapp' => '8888 8888',
+            ])
+            ->assertRedirect(route('profile.show'))
+            ->assertSessionHasNoErrors();
     }
 
     public function test_deleting_an_account_removes_its_profile_media(): void
@@ -310,10 +443,12 @@ class ProfileTest extends TestCase
 
         Storage::disk('public')->put('profiles/avatars/delete-me.png', 'avatar');
         Storage::disk('public')->put('profiles/banners/delete-me.png', 'banner');
+        Storage::disk('public')->put('profiles/diplomas/delete-me.pdf', 'diploma');
 
         $this->profile->update([
             'avatar_path' => 'profiles/avatars/delete-me.png',
             'banner_path' => 'profiles/banners/delete-me.png',
+            'diploma_path' => 'profiles/diplomas/delete-me.pdf',
         ]);
 
         $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
@@ -326,6 +461,7 @@ class ProfileTest extends TestCase
 
         Storage::disk('public')->assertMissing('profiles/avatars/delete-me.png');
         Storage::disk('public')->assertMissing('profiles/banners/delete-me.png');
+        Storage::disk('public')->assertMissing('profiles/diplomas/delete-me.pdf');
     }
 
     public function test_student_profile_pages_render_the_media_controls_and_avatar(): void
@@ -355,7 +491,8 @@ class ProfileTest extends TestCase
             ->assertOk()
             ->assertSee('Imagen de perfil reservada')
             ->assertDontSee('name="avatar"', false)
-            ->assertDontSee('name="banner"', false);
+            ->assertDontSee('name="banner"', false)
+            ->assertDontSee('name="diploma"', false);
     }
 
     public function test_promoting_a_student_to_admin_removes_profile_media(): void
@@ -364,10 +501,12 @@ class ProfileTest extends TestCase
 
         Storage::disk('public')->put('profiles/avatars/promoted.png', 'avatar');
         Storage::disk('public')->put('profiles/banners/promoted.png', 'banner');
+        Storage::disk('public')->put('profiles/diplomas/promoted.pdf', 'diploma');
 
         $this->profile->update([
             'avatar_path' => 'profiles/avatars/promoted.png',
             'banner_path' => 'profiles/banners/promoted.png',
+            'diploma_path' => 'profiles/diplomas/promoted.pdf',
         ]);
 
         $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
@@ -381,9 +520,11 @@ class ProfileTest extends TestCase
         $this->assertTrue($this->student->refresh()->isAdmin());
         $this->assertNull($this->profile->refresh()->avatar_path);
         $this->assertNull($this->profile->banner_path);
+        $this->assertNull($this->profile->diploma_path);
 
         Storage::disk('public')->assertMissing('profiles/avatars/promoted.png');
         Storage::disk('public')->assertMissing('profiles/banners/promoted.png');
+        Storage::disk('public')->assertMissing('profiles/diplomas/promoted.pdf');
     }
 
     /**
@@ -412,6 +553,7 @@ class ProfileTest extends TestCase
             'email' => 'ana@inatec.edu.ni',
             'phone_whatsapp' => '8888 8888',
             'bio' => 'Estudiante de desarrollo de software.',
+            'diploma' => UploadedFile::fake()->create('diploma.pdf', 100, 'application/pdf'),
         ], $overrides);
     }
 }

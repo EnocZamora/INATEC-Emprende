@@ -66,12 +66,12 @@ class UserController extends Controller
             'role' => $request->validated('role'),
         ]);
 
-        // Administrators must not keep profile media, so a promotion clears
-        // both paths and ProfileObserver removes the files from the disk.
+        // Administrators must not keep student media, so promotion clears
+        // every path and ProfileObserver removes the files from the disk.
         if ($user->isAdmin()) {
             $user->profile()
                 ->first()
-                ?->update(['avatar_path' => null, 'banner_path' => null]);
+            ?->update(['avatar_path' => null, 'banner_path' => null, 'diploma_path' => null]);
         }
 
         return back()->with('status', 'user-role-updated');

@@ -71,12 +71,20 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $mediaRules = $this->user()?->isStudent() ?? false
+        $isStudent = $this->user()?->isStudent() ?? false;
+
+        $mediaRules = $isStudent
             ? ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp']
             : ['prohibited'];
 
-        $removalRules = $this->user()?->isStudent() ?? false
+        $removalRules = $isStudent
             ? ['nullable', 'boolean']
+            : ['prohibited'];
+
+        $hasDiploma = filled($this->user()?->profile()->value('diploma_path'));
+
+        $diplomaRules = $isStudent
+            ? [$hasDiploma ? 'nullable' : 'required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048']
             : ['prohibited'];
 
         return [
@@ -103,8 +111,10 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'avatar' => $mediaRules,
             'banner' => $mediaRules,
+            'diploma' => $diplomaRules,
             'remove_avatar' => $removalRules,
             'remove_banner' => $removalRules,
+            'remove_diploma' => $removalRules,
         ];
     }
 
@@ -139,6 +149,11 @@ class ProfileUpdateRequest extends FormRequest
             'banner.max' => 'La portada del perfil no puede superar los 2 MB.',
             'banner.mimes' => 'La portada del perfil debe ser un archivo JPG, PNG o WebP.',
             'banner.prohibited' => 'Las cuentas administrativas no pueden tener portada de perfil.',
+            'diploma.required' => 'Adjunta tu diploma para completar tu perfil.',
+            'diploma.file' => 'El diploma debe ser un archivo PDF o una imagen.',
+            'diploma.max' => 'El diploma no puede superar los 2 MB.',
+            'diploma.mimes' => 'El diploma debe ser un archivo PDF, JPG, PNG o WebP.',
+            'diploma.prohibited' => 'Las cuentas administrativas no pueden tener diploma.',
         ];
     }
 
@@ -156,6 +171,7 @@ class ProfileUpdateRequest extends FormRequest
             'phone_whatsapp' => 'WhatsApp',
             'avatar' => 'foto de perfil',
             'banner' => 'portada del perfil',
+            'diploma' => 'diploma',
         ];
     }
 

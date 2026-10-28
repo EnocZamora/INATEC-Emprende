@@ -5,7 +5,7 @@
 
 @section('content')
     @php
-        $profileErrorKeys = ['name', 'email', 'phone_whatsapp', 'bio', 'avatar', 'banner', 'remove_avatar', 'remove_banner'];
+        $profileErrorKeys = ['name', 'email', 'phone_whatsapp', 'bio', 'avatar', 'banner', 'diploma', 'remove_avatar', 'remove_banner', 'remove_diploma'];
         $passwordErrorKeys = ['current_password', 'password'];
 
         $profileErrors = collect($profileErrorKeys)->flatMap(fn (string $key): array => $errors->get($key))->all();
@@ -93,6 +93,13 @@
                                     <div class="border-t border-slate-100 pt-5">
                                         <x-profile.avatar-upload :name="$user->name" :current="$profile?->avatar_url" />
                                     </div>
+
+                                    <div class="border-t border-slate-100 pt-5">
+                                        <x-profile.diploma-upload
+                                            :current="$profile?->diploma_url"
+                                            :required="blank($profile?->diploma_path)"
+                                        />
+                                    </div>
                                 </div>
                             </section>
                         @else
@@ -103,7 +110,7 @@
                                     <div>
                                         <h2 id="apariencia-admin" class="text-[0.8125rem] font-semibold text-slate-800">Imagen de perfil reservada</h2>
                                         <p class="mt-1 text-[0.75rem] leading-5 text-slate-500">
-                                            Las cuentas administrativas no usan foto ni portada: su identidad se muestra con las iniciales del nombre.
+                                            Las cuentas administrativas no usan foto, portada ni diploma: su identidad se muestra con las iniciales del nombre.
                                         </p>
                                     </div>
                                 </div>

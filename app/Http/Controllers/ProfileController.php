@@ -71,6 +71,7 @@ class ProfileController extends Controller
             if ($canManageMedia) {
                 $this->applyMediaField($request, $profile, 'avatar', 'avatar_path', 'profiles/avatars');
                 $this->applyMediaField($request, $profile, 'banner', 'banner_path', 'profiles/banners');
+                $this->applyMediaField($request, $profile, 'diploma', 'diploma_path', 'profiles/diplomas');
             }
 
             $profile->save();
